@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	<ui:define name="title"> espace admin | produit </ui:define>
+	
+	
+<ui:define name="content">
+		<h1> Produit</h1>
+		<h:form id="form">
+			<p:dataTable id="basicDT" var="prod"
+				value="#{produitCtr.doFindall()}" rows="6" rowKey="#{prod.id}"
+				paginatorPosition="bottom" selectionMode="single" paginator="true"
+				selection="#{produitCtr.selectedProduit}">
+				<p:ajax event="rowSelect" update=":details" />
+			
+				<f:facet name="header">
+	          	List des produits
+	        </f:facet>
+				<p:column headerText="Id">
+					<h:outputText value="#{prod.id}" />
+				</p:column>
+				<p:column headerText="libelle">
+					<h:outputText value="#{prod.libelle}" />
+				</p:column>
+				<p:column headerText="Sous Categorie">
+					<h:outputText value="#{prod.sousCategories.libelle}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		
+		<br />
+		<br />
+
+		<p:panel id="details">
+
+			<div>
+				<center>
+					<h2>Details Produit</h2>
+				</center>
+				<h:panelGrid columns="2">
+					<h:form id="update">
+						<h:panelGrid columns="2" style="margin-right:80px">
+							<h:outputLabel value="Id" />
+							<p:inputText
+								value="#{produitCtr.selectedProduit.id}" />
+							<h:outputLabel value="libelle" />
+							<p:inputText
+								value="#{produitCtr.selectedProduit.libelle}" />
+							<h:outputLabel value="categories" />
+							<p:inputText readonly="true"
+								value="#{produitCtr.selectedProduit.sousCategories.libelle}"></p:inputText>
+		
+							<p:commandButton value="Update" update=":form:basicDT"
+								rendered="#{not empty produitCtr.selectedProduit}"
+								onclick="if (! confirm('Really want to do that?')) return false"
+								action="#{produitCtr.update()}"></p:commandButton>
+							<p:commandButton value="Delete" update=":form:basicDT"
+								rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
+								onclick="if (! confirm('Really want to do that?')) return false"
+								action="#{produitCtr.delete()}"></p:commandButton>
+						</h:panelGrid>
+					</h:form>
+				
+					<h:form id="ajout">
+						<h:panelGrid columns="2">
+							<h:outputLabel value="Sous Categorie" />
+							<p:selectOneMenu value="#{produitCtr.idSousCat}">
+								<f:selectItems var="sousCat"
+									value="#{sousCategoriesCtr.findAll()}"
+									itemValue="#{sousCat.id}" itemLabel="#{sousCat.libelle}" />
+							</p:selectOneMenu>
+							<h:outputLabel value="id" />
+							<p:inputText value="#{produitCtr.produit.id}" />
+							
+							<h:outputLabel value="Libelle" />
+							<p:inputText value="#{produitCtr.produit.libelle}" />
+							
+							<p:commandButton id="dd" value="Add" update=":form:basicDT"
+								action="#{produitCtr.add}"></p:commandButton>
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</div>
+
+		</p:panel>
+		
+		
+
+</ui:define>
+</ui:composition>
