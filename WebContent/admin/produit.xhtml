@@ -20,7 +20,7 @@
 	          	List des produits
 	        </f:facet>
 				<p:column headerText="Id">
-					<h:outputText value="#{prod.id}" />
+					<h:outputText value="#{prod.ref}" />
 				</p:column>
 				<p:column headerText="libelle">
 					<h:outputText value="#{prod.libelle}" />
@@ -45,7 +45,7 @@
 						<h:panelGrid columns="2" style="margin-right:80px">
 							<h:outputLabel value="Id" />
 							<p:inputText
-								value="#{produitCtr.selectedProduit.id}" />
+								value="#{produitCtr.selectedProduit.ref}" />
 							<h:outputLabel value="libelle" />
 							<p:inputText
 								value="#{produitCtr.selectedProduit.libelle}" />
@@ -73,7 +73,7 @@
 									itemValue="#{sousCat.id}" itemLabel="#{sousCat.libelle}" />
 							</p:selectOneMenu>
 							<h:outputLabel value="id" />
-							<p:inputText value="#{produitCtr.produit.id}" />
+							<p:inputText value="#{produitCtr.produit.ref}" />
 							
 							<h:outputLabel value="Libelle" />
 							<p:inputText value="#{produitCtr.produit.libelle}" />

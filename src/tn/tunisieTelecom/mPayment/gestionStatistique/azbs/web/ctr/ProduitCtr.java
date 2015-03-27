@@ -35,8 +35,8 @@ public class ProduitCtr {
 		
 		produit.setSousCategories(sousCategotiesEJBLocal.findById(idSousCat));
 		for (Produit produit : produits) {
-			if(produit.getId()== this.produit.getId()){
-				System.err.println("duplicate id for produit");
+			if(produit.getRef()== this.produit.getRef()){
+				System.err.println("duplicate Ref for produit");
 				
 				return;
 			}
@@ -47,6 +47,13 @@ public class ProduitCtr {
 	}
 
 	public void update(){
+		for (Produit produit : produits) {
+			if(produit.getRef()== this.produit.getRef()){
+				System.err.println("duplicate Ref for produit");
+				
+				return;
+			}
+		}
 		produitEJBLocal.update(selectedProduit);
 	}
 	public void delete(){
