@@ -16,7 +16,7 @@ public class BanqueCtr {
 	
 	
 	private List<Banque> banques = new ArrayList<Banque>();
-	private Banque banque;
+	private Banque banque = new Banque();
 	private Banque selectedBanque = new Banque();
 	
 	@EJB
@@ -34,6 +34,7 @@ public class BanqueCtr {
 	}
 	
 	public void add (){
+		System.out.println("OKI");
 		banqueEJBLocal.add(banque);
 		banque = new Banque();
 	}
