@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Banque;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Transaction;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.BanqueEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.ProduitEJBLocal;
@@ -65,7 +66,7 @@ public class transactionCtr {
 						tr.setDate(date_trans);
 						tr.setMontant(montant);
 						tr.setTel_benef(tel_benef);
-						
+						transactions.add(tr);
 						
 				}	
 				
@@ -83,15 +84,70 @@ public class transactionCtr {
 
 	}
 	void traitement_Fichier_ATB(){
-		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+		Banque banque = new Banque() ;
+		banque = banqueEJBLocal.findById(idBanque);
+		try {
+
+			InputStream ips=new FileInputStream(file.getName()); 
+			InputStreamReader ipsr=new InputStreamReader(ips);
+			BufferedReader br=new BufferedReader(ipsr);
+			String ligne;
+			while ((ligne=br.readLine())!=null){
+				System.out.println(ligne);
+				StringTokenizer st = new StringTokenizer(ligne , "|");
+				while (st.hasMoreTokens()) {
+						String etat = st.nextToken();
+						String id_trans = st.nextToken();
+						String tel_source = st.nextToken();
+						Date date_trans = formatter.parse(st.nextToken());
+						Double montant = Double.parseDouble(st.nextToken());
+						String prod = st.nextToken();
+						tr = new Transaction();
+						tr.setProduit(produitEJBLocal.findByref(Integer.parseInt(prod)));
+						tr.setBanque(banque);
+						tr.setEtat(etat);
+						tr.setId_transaction(id_trans);
+						tr.setDate(date_trans);
+						tr.setMontant(montant);
+						tr.setTel_source(tel_source);
+						System.out.println(tr.getId());
+						System.out.println(tr.getEtat());
+						System.out.println(tr.getId_transaction());
+						System.out.println(tr.getTel_benef());
+						System.out.println(tr.getTel_source());
+						System.out.println(tr.getBanque().getNom());
+						System.out.println(tr.getDate());
+						System.out.println(tr.getMontant());
+						System.out.println(tr.getProduit().getLibelle());
+						transactions.add(tr);
+				}
+				
+			}	
+		} catch (Exception e) {
+
+			System.out.println(e.getMessage());
+	}
 	}
 	void traitement_Fichier_SMT(){
-	
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+		Banque banque = new Banque() ;
+		banque = banqueEJBLocal.findById(idBanque);
+		try {
+			
+			
+		} catch (Exception e) {
+
+			System.out.println(e.getMessage());
+		}
+		
 	}
 
 	public void traiterFichier() throws IOException {
 		System.out.println("OKKKKKKKK");
-		System.out.println(file.getPath());
+		System.out.println(idBanque);
+		
 		
 		try {
 			switch(idBanque){
@@ -103,7 +159,8 @@ public class transactionCtr {
 		
 		
 		} catch (Exception e) {
-			// TODO: handle exception
+
+			System.out.println(e.getMessage());
 		}
 		
 	}
