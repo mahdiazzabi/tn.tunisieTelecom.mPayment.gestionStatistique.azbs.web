@@ -20,7 +20,6 @@ public class UserCtr {
 
 	public String doLogin() {
 		String redirecTo = "";
-		System.err.println("aaaaaaaaaaaaaa");
 		if ((user = userEJBLocal.authentification(login, mdp)) == null) {
 			//redirecTo = "index.jsf?faces-redirect=true";
 		} else {

@@ -5,21 +5,25 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
 	<ui:define name="title"> espace admin | produit </ui:define>
-	
-	
-<ui:define name="content">
-		<h1> Produit</h1>
+
+
+	<ui:define name="content">
+		<h1>Produit</h1>
 		<h:form id="form">
 			<p:dataTable id="basicDT" var="prod"
 				value="#{produitCtr.doFindall()}" rows="6" rowKey="#{prod.id}"
 				paginatorPosition="bottom" selectionMode="single" paginator="true"
 				selection="#{produitCtr.selectedProduit}">
 				<p:ajax event="rowSelect" update=":details" />
-			
+
 				<f:facet name="header">
 	          	List des produits
 	        </f:facet>
+	        
 				<p:column headerText="Id">
+					<h:outputText value="#{prod.id}" />
+				</p:column>
+				<p:column headerText="Reference">
 					<h:outputText value="#{prod.ref}" />
 				</p:column>
 				<p:column headerText="libelle">
@@ -30,7 +34,7 @@
 				</p:column>
 			</p:dataTable>
 		</h:form>
-		
+
 		<br />
 		<br />
 
@@ -44,15 +48,13 @@
 					<h:form id="update">
 						<h:panelGrid columns="2" style="margin-right:80px">
 							<h:outputLabel value="Id" />
-							<p:inputText
-								value="#{produitCtr.selectedProduit.ref}" />
+							<p:inputText value="#{produitCtr.selectedProduit.ref}" />
 							<h:outputLabel value="libelle" />
-							<p:inputText
-								value="#{produitCtr.selectedProduit.libelle}" />
+							<p:inputText value="#{produitCtr.selectedProduit.libelle}" />
 							<h:outputLabel value="categories" />
 							<p:inputText readonly="true"
 								value="#{produitCtr.selectedProduit.sousCategories.libelle}"></p:inputText>
-		
+
 							<p:commandButton value="Update" update=":form:basicDT"
 								rendered="#{not empty produitCtr.selectedProduit}"
 								onclick="if (! confirm('Really want to do that?')) return false"
@@ -63,7 +65,7 @@
 								action="#{produitCtr.delete()}"></p:commandButton>
 						</h:panelGrid>
 					</h:form>
-				
+
 					<h:form id="ajout">
 						<h:panelGrid columns="2">
 							<h:outputLabel value="Sous Categorie" />
@@ -72,12 +74,12 @@
 									value="#{sousCategoriesCtr.findAll()}"
 									itemValue="#{sousCat.id}" itemLabel="#{sousCat.libelle}" />
 							</p:selectOneMenu>
-							<h:outputLabel value="id" />
+							<h:outputLabel value="Reference " />
 							<p:inputText value="#{produitCtr.produit.ref}" />
-							
+
 							<h:outputLabel value="Libelle" />
 							<p:inputText value="#{produitCtr.produit.libelle}" />
-							
+
 							<p:commandButton id="dd" value="Add" update=":form:basicDT"
 								action="#{produitCtr.add}"></p:commandButton>
 						</h:panelGrid>
@@ -86,8 +88,8 @@
 			</div>
 
 		</p:panel>
-		
-		
 
-</ui:define>
+
+
+	</ui:define>
 </ui:composition>

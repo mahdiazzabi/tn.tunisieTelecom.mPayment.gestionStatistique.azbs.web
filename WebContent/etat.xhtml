@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	<ui:define name="title"> espace admin</ui:define>
+
+	<ui:define name="content">
+
+	
+			<h:panelGrid columns="2">
+				<h:form id="form">
+
+					<p:growl id="msgs" showDetail="true" />
+					<h:panelGrid columns="6" style="margin-right:80px">
+
+						<h:outputLabel value="Banque :" />
+						<p:selectOneMenu value="#{etat.idBanque}">
+							<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
+								itemValue="#{banq.id}" itemLabel="#{banq.nom}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Du :" />
+						<p:calendar id="popup" value="#{etat.date_debut}" />
+
+						<p:outputLabel value="Au :" />
+						<p:calendar id="popup2" value="#{etat.date_fin}" />
+	
+						<p:commandButton value="Valider" action="#{etat.doEtat()}"
+							onclick="rendered"></p:commandButton>
+
+					</h:panelGrid>
+
+				</h:form>
+			</h:panelGrid>
+	<p:panel rendered="#{not empty etat.lignes}" >
+
+			<form id="form1">
+				<p:dataTable id="basicDT1" value="#{etat.lignes}" var="l">
+
+					<f:facet name="header">
+		            Etat statistique de l'entite bancaire #{etat.idBanque} 
+        			</f:facet>
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column rowspan="2" colspan="6"
+								headerText="Categories et sous categories" />
+							<p:column rowspan="2" colspan="4" headerText="Nombre" />
+							<p:column rowspan="2" colspan="4" headerText="Montant" />
+						</p:row>
+					</p:columnGroup>
+
+
+					<p:column rowspan="1" colspan="6">
+						<f:facet name="header">Categories et sous categories</f:facet>
+    					#{l.libelle}
+    				</p:column>
+
+					<p:column rowspan="1" colspan="4">
+						<f:facet name="header">Nombre</f:facet>
+    					#{l.nombre}
+    				</p:column>
+
+					<p:column rowspan="1" colspan="4">
+						<f:facet name="header">Montant</f:facet>
+    					#{l.montant}
+    				</p:column>
+
+					<p:columnGroup type="footer">
+
+						<p:row>
+							<p:column rowspan="1" colspan="6" footerText="Totale: "
+								style="text-align:right" />
+							<p:column rowspan="1" colspan="4" footerText="" />
+							<p:column rowspan="1" colspan="4" footerText="" />
+						</p:row>
+					</p:columnGroup>
+
+					<f:facet name="footer">
+            Date Du "DATE" au "DATE"
+        </f:facet>
+
+
+
+				</p:dataTable>
+
+			</form>
+
+
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
