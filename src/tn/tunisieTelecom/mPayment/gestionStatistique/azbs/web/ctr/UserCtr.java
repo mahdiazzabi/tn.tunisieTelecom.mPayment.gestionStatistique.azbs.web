@@ -14,22 +14,31 @@ public class UserCtr {
 	private String login;
 	private String mdp;
 	private User user;
-
+	private boolean loggedIn = false ;
 	@EJB
 	UserEJBLocal userEJBLocal;
 
 	public String doLogin() {
 		String redirecTo = "";
 		if ((user = userEJBLocal.authentification(login, mdp)) == null) {
-			//redirecTo = "index.jsf?faces-redirect=true";
+			// redirecTo = "index.jsf?faces-redirect=true";
 		} else {
 			if (user instanceof Admin) {
+				loggedIn= true ;
 				redirecTo = "/admin/index.jsf?faces-redirect=true";
 			} else {
 				redirecTo = "/employees/index.jsf?faces-redirect=true";
 			}
 		}
 		return redirecTo;
+	}
+
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
 	}
 
 	public User getUser() {

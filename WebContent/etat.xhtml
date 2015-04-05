@@ -7,89 +7,112 @@
 	<ui:define name="title"> espace admin</ui:define>
 
 	<ui:define name="content">
+		<h:panelGrid columns="2">
+			<h:form id="form">
+				<p:growl id="msg" showDetail="true" />
+				<p:growl id="msgs" showDetail="true" />
+				<h:panelGrid columns="6" style="margin-right:80px">
+					<h:outputLabel value="Banque :" />
+					<p:selectOneMenu value="#{etatCategoriesCtr.id_banque}">
+						<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
+							itemValue="#{banq.id}" itemLabel="#{banq.nom}" />
+					</p:selectOneMenu>
+					<p:outputLabel value="Du :" />
+					<p:calendar id="popup" value="#{etatCategoriesCtr.start}" />
+					<p:outputLabel value="Au :" />
+					<p:calendar id="popup2" value="#{etatCategoriesCtr.end}" />
+					<p:commandButton value="Valider"
+						action="#{etatCategoriesCtr.doEtatCategorie()}" onclick="rendered"></p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</h:panelGrid>
+		<p:panel>
+			<h:form id="myform">
 
-	
-			<h:panelGrid columns="2">
-				<h:form id="form">
-
-					<p:growl id="msgs" showDetail="true" />
-					<h:panelGrid columns="6" style="margin-right:80px">
-
-						<h:outputLabel value="Banque :" />
-						<p:selectOneMenu value="#{etat.idBanque}">
-							<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
-								itemValue="#{banq.id}" itemLabel="#{banq.nom}" />
-						</p:selectOneMenu>
-
-						<p:outputLabel value="Du :" />
-						<p:calendar id="popup" value="#{etat.date_debut}" />
-
-						<p:outputLabel value="Au :" />
-						<p:calendar id="popup2" value="#{etat.date_fin}" />
-	
-						<p:commandButton value="Valider" action="#{etat.doEtat()}"
-							onclick="rendered"></p:commandButton>
-
-					</h:panelGrid>
-
-				</h:form>
-			</h:panelGrid>
-	<p:panel rendered="#{not empty etat.lignes}" >
-
-			<form id="form1">
-				<p:dataTable id="basicDT1" value="#{etat.lignes}" var="l">
-
+				<p:dataTable id="tbl" value="#{etatCategoriesCtr.etats}" var="l"
+					rows="6" rowKey="#{l.id}"
+					selection="#{etatCategoriesCtr.selectedEtat}">
 					<f:facet name="header">
-		            Etat statistique de l'entite bancaire #{etat.idBanque} 
-        			</f:facet>
+		            	Etat statistique de la banque : #{etatCategoriesCtr.banque.nom}
+		            	 	</f:facet>
 					<p:columnGroup type="header">
 						<p:row>
-							<p:column rowspan="2" colspan="6"
-								headerText="Categories et sous categories" />
-							<p:column rowspan="2" colspan="4" headerText="Nombre" />
-							<p:column rowspan="2" colspan="4" headerText="Montant" />
+							<p:column rowspan="2" colspan="3" headerText="Categories" />
+							<p:column rowspan="2" colspan="2" headerText="Nombre des transactions" />
+							<p:column rowspan="2" colspan="2" headerText="Montant total" />
 						</p:row>
 					</p:columnGroup>
 
-
-					<p:column rowspan="1" colspan="6">
-						<f:facet name="header">Categories et sous categories</f:facet>
-    					#{l.libelle}
-    				</p:column>
-
-					<p:column rowspan="1" colspan="4">
-						<f:facet name="header">Nombre</f:facet>
-    					#{l.nombre}
-    				</p:column>
-
-					<p:column rowspan="1" colspan="4">
-						<f:facet name="header">Montant</f:facet>
-    					#{l.montant}
-    				</p:column>
+					<p:column rowspan="1" colspan="3" headerText="Categories">
+						<h:outputLabel value="#{l.libelle}" />
+					</p:column>
+					<p:column rowspan="1" colspan="2"
+						headerText="Nombre des transaction">
+						<h:outputLabel value="#{l.nbr}" />
+					</p:column>
+					<p:column rowspan="1" colspan="2" headerText="Montant Total">
+						<h:outputLabel value="#{l.somme}" />
+					</p:column>
 
 					<p:columnGroup type="footer">
-
 						<p:row>
-							<p:column rowspan="1" colspan="6" footerText="Totale: "
-								style="text-align:right" />
-							<p:column rowspan="1" colspan="4" footerText="" />
-							<p:column rowspan="1" colspan="4" footerText="" />
+							<p:column colspan="3" style="text-align:right"
+								footerText="Totals:" />
+							<p:column colspan="2" footerText="#{etatCategoriesCtr.total_nbr}" />
+
+							<p:column colspan="2"
+								footerText="#{etatCategoriesCtr.total_montant}" />
 						</p:row>
 					</p:columnGroup>
 
 					<f:facet name="footer">
-            Date Du "DATE" au "DATE"
+            Date Du #{etatCategoriesCtr.start.toLocaleString()} au #{etatCategoriesCtr.end.toLocaleString()}
         </f:facet>
 
-
-
 				</p:dataTable>
+				<h:panelGrid>
+					<p:panel header="Exporter">
+						<h:commandLink>
+							<p:graphicImage value="/ressources/images/pdf-2.png" />
+							<p:dataExporter type="pdf" target="tbl" fileName="Etat" />
+						</h:commandLink>
+						<h:commandLink>
+							<p:graphicImage value="/ressources/images/Excel.png" />
+							<p:dataExporter type="xls" target="tbl" fileName="Etat" />
+						</h:commandLink>
 
-			</form>
+					</p:panel>
+				</h:panelGrid>
 
 
-
+				<br />
+			</h:form>
 		</p:panel>
+		<p:panel id="etatSousCat">
+			<p:dataTable id="sousCatDT"
+				value="#{etatCategoriesCtr.etatSousCategories}" var="l" rows="10"
+				rowKey="#{l.libelle}">
+				<f:facet name="header">
+		            	Details des Sous categories 
+        			</f:facet>
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column rowspan="2" colspan="3" headerText="Sous Categories" />
+							<p:column rowspan="2" colspan="2" headerText="Nombre des transactions" />
+							<p:column rowspan="2" colspan="2" headerText="Montant total" />
+						</p:row>
+					</p:columnGroup>
 
+				<p:column rowspan="1" colspan="3" headerText="Sous Categories">
+					<h:outputLabel value="#{l.libelle}" />
+				</p:column>
+				<p:column rowspan="1" colspan="2" headerText="Nombre des transaction">
+					<h:outputLabel value="#{l.nbr}" />
+				</p:column>
+				<p:column rowspan="1" colspan="2" headerText="Montant Total">
+					<h:outputLabel value="#{l.somme}" />
+				</p:column>
+			</p:dataTable>
+		</p:panel>
 	</ui:define>
 </ui:composition>

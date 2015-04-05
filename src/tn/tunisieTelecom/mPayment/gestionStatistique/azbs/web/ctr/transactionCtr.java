@@ -52,7 +52,7 @@ public class transactionCtr {
 				traitement_Fichier_STB_BH_BNA(in);
 				break;
 			case 4:
-				transactionEJBLocal.addListe(traitement_Fichier_ATB());
+				traitement_Fichier_ATB(in);
 				break;
 			case 5:
 				transactionEJBLocal.addListe(traitement_Fichier_SMT_Mobile());
@@ -113,15 +113,11 @@ public class transactionCtr {
 		}
 	}
 
-	List<Transaction> traitement_Fichier_ATB() {
-
+	void traitement_Fichier_ATB(InputStream in) {
 		transactions = new ArrayList<Transaction>();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-		Banque banque = new Banque();
-		banque = banqueEJBLocal.findById(idBanque);
-
 		try {
-			InputStream ips = new FileInputStream("");
+			InputStream ips = in;
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
 			String ligne;
@@ -135,34 +131,29 @@ public class transactionCtr {
 					Date date_trans = formatter.parse(st.nextToken());
 					Double montant = Double.parseDouble(st.nextToken());
 					String prod = st.nextToken();
+					
 					tr = new Transaction();
-					tr.setProduit(produitEJBLocal.findByref(Integer
-							.parseInt(prod)));
+					for (Produit produit : produits) {
+						if (produit.getRef() == Integer.parseInt(prod.trim())) {
+							tr.setProduit(produit);
+						}						
+					}
 					tr.setBanque(banque);
 					tr.setEtat(etat);
 					tr.setId_transaction(id_trans);
 					tr.setDate(date_trans);
 					tr.setMontant(montant);
 					tr.setTel_source(tel_source);
-
-					System.out.println(tr.getId());
-					System.out.println(tr.getEtat());
-					System.out.println(tr.getId_transaction());
-					System.out.println(tr.getTel_benef());
-					System.out.println(tr.getTel_source());
-					System.out.println(tr.getBanque().getNom());
-					System.out.println(tr.getDate());
-					System.out.println(tr.getMontant());
-					System.out.println(tr.getProduit().getLibelle());
 					transactions.add(tr);
 				}
 
 			}
+			transactionEJBLocal.addListe(transactions);
+			br.close();
 		} catch (Exception e) {
-
 			System.out.println(e.getMessage());
 		}
-		return transactions;
+		
 	}
 
 	List<Transaction> traitement_Fichier_SMT_Mobile() {
