@@ -2,6 +2,7 @@ package tn.tunisieTelecom.mPayment.gestionStatistique.azbs.web.ctr;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -38,20 +39,28 @@ public class EtatCategoriesCtr implements Serializable {
 
 	@EJB
 	TransactionEJBLocal transactionEJBLocal;
-	
+
 	@EJB
 	BanqueEJBLocal banqueEJBLocal;
-	
+
 	public void doEtatCategorie() {
 		total_montant = 0;
 		total_nbr = 0;
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(end);
+		calendar.add(calendar.HOUR_OF_DAY, +23);
+		calendar.add(calendar.MINUTE, 59);
+		calendar.add(calendar.SECOND, 59);
+		end = calendar.getTime();
+		System.err.println(start + "   " + end);
 		etats = transactionEJBLocal.calculEtat(start, end, id_banque);
 		for (Etat etat : etats) {
 			total_nbr += etat.getNbr();
 			total_montant += etat.getSomme();
 		}
-		etatSousCategories = transactionEJBLocal.calculeEtatSousCategorie(start, end, id_banque);
-		banque=banqueEJBLocal.findById(id_banque);
+		etatSousCategories = transactionEJBLocal.calculeEtatSousCategorie(
+				start, end, id_banque);
+		banque = banqueEJBLocal.findById(id_banque);
 	}
 
 	public Banque getBanque() {

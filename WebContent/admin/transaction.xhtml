@@ -11,21 +11,32 @@
 		<h1>Traitement des fichiers</h1>
 
 		<h:form enctype="multipart/form-data">
+			<p:growl id="growl" />
+
+
 			<h:panelGrid columns="2">
 				<h:outputLabel value="Banque" />
 				<p:selectOneMenu value="#{transactionCtr.idBanque}">
 					<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
 						itemValue="#{banq.id}" itemLabel="#{banq.nom}" />
 				</p:selectOneMenu>
-				<br />
+				
 				<br />
 			</h:panelGrid>
-			<p:fileUpload value="#{fileUploadController.file}" mode="simple"
-				skinSimple="true" />
-			<p:commandButton value="Traiter" ajax="false"
-				actionListener="#{fileUploadController.upload}" disabled="false" />
+
+			<h:panelGrid columns="2">
+
+				<p:fileUpload value="#{fileUploadController.file}" mode="simple"
+					skinSimple="true" />
+					<br />
+					<br />
+				<p:commandButton value="Traiter" ajax="false"
+					actionListener="#{fileUploadController.upload}" disabled="false" />
+
+			</h:panelGrid>
+
+
 		</h:form>
-		
 	</ui:define>
 </ui:composition>
 

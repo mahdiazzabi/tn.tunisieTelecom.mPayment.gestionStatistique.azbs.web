@@ -6,7 +6,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Categories;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.CategoriesLocal;
 
@@ -35,7 +34,6 @@ public class CategoriesCtr {
 		categoriesLocal.add(categorie);
 		categorie = new Categories();
 	}
-
 	public Categories getCategorie() {
 		return categorie;
 	}

@@ -23,7 +23,8 @@ public class FileUploadController implements Serializable {
 
 	public void upload() {
 		try {
-			transaction.traiterFichier(file.getInputstream());
+			System.err.println(file.getFileName());
+			transaction.traiterFichier(file.getInputstream(), file.getFileName() );
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

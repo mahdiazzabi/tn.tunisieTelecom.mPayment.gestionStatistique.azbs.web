@@ -10,13 +10,13 @@
 		<h1>categories</h1>
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
-			<p:dataTable id="basicDT" var="cat"
+			<p:dataTable id="basicDT" var="cat" editable="true"
 				value="#{categoriesCtr.listCategories()}" rows="6"
 				rowKey="#{cat.id}" paginatorPosition="bottom" selectionMode="single"
 				paginator="true" selection="#{categoriesCtr.setectedCategories}">
 				<p:ajax event="rowSelect" update=":details" />
 				<f:facet name="header">
-	          	List Categories
+				       	List Categories
 	        </f:facet>
 				<p:column headerText="Id">
 					<h:outputText value="#{cat.id}" />

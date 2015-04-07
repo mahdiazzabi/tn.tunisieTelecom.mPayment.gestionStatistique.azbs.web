@@ -33,13 +33,15 @@
 					rows="6" rowKey="#{l.id}"
 					selection="#{etatCategoriesCtr.selectedEtat}">
 					<f:facet name="header">
-		            	Etat statistique de la banque : #{etatCategoriesCtr.banque.nom}
+		            	Etat statistique de la banque : #{etatCategoriesCtr.banque.nom} Du #{etatCategoriesCtr.start.toLocaleString()} au #{etatCategoriesCtr.end.toLocaleString()}
 		            	 	</f:facet>
 					<p:columnGroup type="header">
 						<p:row>
-							<p:column rowspan="2" colspan="3" headerText="Categories" />
-							<p:column rowspan="2" colspan="2" headerText="Nombre des transactions" />
-							<p:column rowspan="2" colspan="2" headerText="Montant total" />
+							<p:column rowspan="2" colspan="3" headerText="Catégories" />
+							<p:column rowspan="2" colspan="2"
+								headerText="Nombre des transactions" />
+							<p:column rowspan="2" colspan="2"
+								headerText="Montant total (en dt)" />
 						</p:row>
 					</p:columnGroup>
 
@@ -66,10 +68,43 @@
 					</p:columnGroup>
 
 					<f:facet name="footer">
-            Date Du #{etatCategoriesCtr.start.toLocaleString()} au #{etatCategoriesCtr.end.toLocaleString()}
+            
         </f:facet>
 
 				</p:dataTable>
+
+				<br />
+
+				<br />
+				<p:panel id="etatSousCat">
+					<p:dataTable id="sousCatDT"
+						value="#{etatCategoriesCtr.etatSousCategories}" var="l" rows="10"
+						rowKey="#{l.libelle}">
+						<f:facet name="header">
+		            	Détails des sous categories 
+        			</f:facet>
+						<p:columnGroup type="header">
+							<p:row>
+								<p:column rowspan="2" colspan="3" headerText="Sous Catégories" />
+								<p:column rowspan="2" colspan="2"
+									headerText="Nombre des transactions" />
+								<p:column rowspan="2" colspan="2"
+									headerText="Montant total (en dt)" />
+							</p:row>
+						</p:columnGroup>
+
+						<p:column rowspan="1" colspan="3" headerText="Sous Categories">
+							<h:outputLabel value="#{l.libelle}" />
+						</p:column>
+						<p:column rowspan="1" colspan="2"
+							headerText="Nombre des transaction">
+							<h:outputLabel value="#{l.nbr}" />
+						</p:column>
+						<p:column rowspan="1" colspan="2" headerText="Montant Total">
+							<h:outputLabel value="#{l.somme}" />
+						</p:column>
+					</p:dataTable>
+				</p:panel>
 				<h:panelGrid>
 					<p:panel header="Exporter">
 						<h:commandLink>
@@ -84,35 +119,7 @@
 					</p:panel>
 				</h:panelGrid>
 
-
-				<br />
 			</h:form>
-		</p:panel>
-		<p:panel id="etatSousCat">
-			<p:dataTable id="sousCatDT"
-				value="#{etatCategoriesCtr.etatSousCategories}" var="l" rows="10"
-				rowKey="#{l.libelle}">
-				<f:facet name="header">
-		            	Details des Sous categories 
-        			</f:facet>
-					<p:columnGroup type="header">
-						<p:row>
-							<p:column rowspan="2" colspan="3" headerText="Sous Categories" />
-							<p:column rowspan="2" colspan="2" headerText="Nombre des transactions" />
-							<p:column rowspan="2" colspan="2" headerText="Montant total" />
-						</p:row>
-					</p:columnGroup>
-
-				<p:column rowspan="1" colspan="3" headerText="Sous Categories">
-					<h:outputLabel value="#{l.libelle}" />
-				</p:column>
-				<p:column rowspan="1" colspan="2" headerText="Nombre des transaction">
-					<h:outputLabel value="#{l.nbr}" />
-				</p:column>
-				<p:column rowspan="1" colspan="2" headerText="Montant Total">
-					<h:outputLabel value="#{l.somme}" />
-				</p:column>
-			</p:dataTable>
 		</p:panel>
 	</ui:define>
 </ui:composition>

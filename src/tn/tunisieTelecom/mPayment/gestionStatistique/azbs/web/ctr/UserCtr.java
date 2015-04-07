@@ -14,17 +14,17 @@ public class UserCtr {
 	private String login;
 	private String mdp;
 	private User user;
-	private boolean loggedIn = false ;
+	private boolean loggedIn = false;
 	@EJB
 	UserEJBLocal userEJBLocal;
 
 	public String doLogin() {
 		String redirecTo = "";
-		if ((user = userEJBLocal.authentification(login, mdp)) == null) {
+		if ((user = userEJBLocal.doLogin(login, mdp)) == null) {
 			// redirecTo = "index.jsf?faces-redirect=true";
 		} else {
 			if (user instanceof Admin) {
-				loggedIn= true ;
+				loggedIn = true;
 				redirecTo = "/admin/index.jsf?faces-redirect=true";
 			} else {
 				redirecTo = "/employees/index.jsf?faces-redirect=true";
