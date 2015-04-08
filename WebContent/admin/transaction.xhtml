@@ -9,6 +9,13 @@
 
 	<ui:define name="content">
 		<h1>Traitement des fichiers</h1>
+		<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="true" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
 
 		<h:form enctype="multipart/form-data">
 			<p:growl id="growl" />
@@ -20,21 +27,48 @@
 					<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
 						itemValue="#{banq.id}" itemLabel="#{banq.nom}" />
 				</p:selectOneMenu>
-				
+
 				<br />
 			</h:panelGrid>
 
 			<h:panelGrid columns="2">
 
 				<p:fileUpload value="#{fileUploadController.file}" mode="simple"
-					skinSimple="true" />
-					<br />
-					<br />
-				<p:commandButton value="Traiter" ajax="false"
+					skinSimple="true" required="true" />
+
+				<br />
+				<br />
+				<p:commandButton value="Traiter" ajax="false" update=":form:basicDT"
 					actionListener="#{fileUploadController.upload}" disabled="false" />
 
 			</h:panelGrid>
+			<br />
+			<br />
+				
+			<h:form id="form">
+				<p:dataTable id="basicDT" var="f"
+					value="#{fichierCtr.listeFichier()}" rows="10" rowKey="#{f.id}"
+					paginatorPosition="bottom"  paginator="true">
+					<f:facet name="header">
+	          	Fichiers récemment traités
+	        </f:facet>
+					<p:column headerText="Nom Fichier">
+						<h:outputText value="#{f.nom}" />
+					</p:column>
+					<p:column headerText="Date Fichier">
+						<h:outputText value="#{f.date_fichier}" />
+					</p:column>
+					<p:column headerText="Date Traitement">
+						<h:outputText value="#{f.date_traitement}" />
+					</p:column>
+					<p:column headerText="Traiter par">
+						<h:outputText value="#{f.user.login}" />
+					</p:column>
 
+
+				</p:dataTable>
+
+			</h:form>
 
 		</h:form>
 	</ui:define>
