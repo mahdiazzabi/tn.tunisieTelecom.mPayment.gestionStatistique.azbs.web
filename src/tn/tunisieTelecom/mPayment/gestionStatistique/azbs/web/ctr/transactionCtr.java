@@ -81,7 +81,6 @@ public class transactionCtr {
 							"ddMMyyyy");
 					Date date_fichier = formatter1
 							.parse(tab[1].substring(0, 8));
-					System.err.println(date_fichier);
 					traitement_Fichier_STB_BH_BNA(in, fileName, date_fichier);
 
 				}
@@ -105,7 +104,6 @@ public class transactionCtr {
 							"ddMMyyyy");
 					Date date_fichier = formatter1
 							.parse(tab[1].substring(0, 8));
-					System.err.println(date_fichier);
 					traitement_Fichier_ATB(in, fileName, date_fichier);
 				}
 			}
@@ -116,7 +114,6 @@ public class transactionCtr {
 					SimpleDateFormat formatter1 = new SimpleDateFormat(
 							"ddMMyyyy");
 					Date date_fichier = formatter1.parse(tab[3]);
-					System.err.println(date_fichier);
 					traitement_Fichier_SMT(in, fileName, date_fichier);
 				} else
 					FacesContext.getCurrentInstance().addMessage(
@@ -228,9 +225,7 @@ public class transactionCtr {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 		fichier = fichierEJBLocal.findByNom(fileName);
 		if (fichier == null) {
-			// creer nouveau fichier
-			System.err
-					.println("----------------CREATION NEW FICHIER----------------");
+		
 			fichier = new Fichier();
 			fichier.setBanque(banque);
 			fichier.setNom(fileName);
@@ -253,7 +248,6 @@ public class transactionCtr {
 				BufferedReader br = new BufferedReader(ipsr);
 				String ligne;
 				while ((ligne = br.readLine()) != null) {
-					System.out.println(ligne);
 					StringTokenizer st = new StringTokenizer(ligne, "|");
 					while (st.hasMoreTokens()) {
 						String etat = st.nextToken();
@@ -261,9 +255,7 @@ public class transactionCtr {
 						String tel_source = st.nextToken();
 						Date date_trans = formatter.parse(st.nextToken());
 						Double montant = Double.parseDouble(st.nextToken());
-						montant = montant / 1000; // montant intial en millimes
-													// =>
-													// convertion en dinars
+						montant = montant / 1000; 
 						String prod = st.nextToken().toUpperCase();
 
 						tr = new Transaction();
@@ -271,7 +263,7 @@ public class transactionCtr {
 							if (produit.getRef() == Integer.parseInt(prod
 									.trim())) {
 								tr.setProduit(produit);
-							}
+								}
 						}
 						tr.setFichier(fichier);
 						tr.setEtat(etat);

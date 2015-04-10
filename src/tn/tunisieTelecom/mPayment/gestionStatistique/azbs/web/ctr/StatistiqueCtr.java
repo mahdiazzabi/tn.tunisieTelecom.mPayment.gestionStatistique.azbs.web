@@ -1,6 +1,7 @@
 package tn.tunisieTelecom.mPayment.gestionStatistique.azbs.web.ctr;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -15,14 +16,15 @@ import org.primefaces.model.chart.PieChartModel;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Banque;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.BanqueEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.TransactionEJBLocal;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.util.Etat;
 
 @ManagedBean
 @SessionScoped
 public class StatistiqueCtr {
 
 	
-	private PieChartModel pieModel1;
-    private PieChartModel pieModel2;
+	private PieChartModel pieModel1 = new PieChartModel();
+    private PieChartModel pieModel2 = new PieChartModel();
     private List<Banque> banques = new ArrayList<Banque>();
     private Date start;
     private Date end ;
@@ -34,47 +36,47 @@ public class StatistiqueCtr {
     @EJB
     TransactionEJBLocal transactionEJBLocal ;
     
-    @PostConstruct
-    public void init() {
-        createPieModels();
-    }
     
-    
-    private void createPieModels() {
-        createPieModel1();
-        createPieModel2();
-    }
- 
-    private void createPieModel1() {
+         
+    private void createPieModel() {
         pieModel1 = new PieChartModel();
+        pieModel2 = new PieChartModel();
+        
         banques = banqueEJBlocal.findAll();
-        int i = 50 ;
+        List<Etat> etats = new ArrayList<Etat>();
+        Calendar calendar = Calendar.getInstance();
+		calendar.setTime(end);
+		calendar.add(calendar.HOUR_OF_DAY, +23);
+		calendar.add(calendar.MINUTE, 59);
+		calendar.add(calendar.SECOND, 59);
+		end = calendar.getTime();
+		float total_montant ;
         for (Banque banque : banques) {
-        	
-
-            pieModel1.set(banque.getNom(), i+ 50);
-            
+        	total_montant = 0 ;
+        	etats = transactionEJBLocal.calculEtat(start, end, banque.getId());
+        	for (Etat etat : etats) {
+    			total_montant += etat.getSomme();
+    		}
+        	System.err.println(banque.getNom()+ "   ="+ total_montant);
+        	pieModel1.set(banque.getNom(), total_montant);
+            pieModel2.set(banque.getNom(), total_montant);
+                     
 		}
              
-        pieModel1.setTitle("Simple Pie");
+        pieModel1.setTitle("Statistiques périodique des banques");
         pieModel1.setLegendPosition("w");
-    }
-     
-    private void createPieModel2() {
-        pieModel2 = new PieChartModel();
-         
-        pieModel2.set("Brand 1", 540);
-        pieModel2.set("Brand 2", 325);
-        pieModel2.set("Brand 3", 702);
-        pieModel2.set("Brand 4", 421);
-        pieModel2.setTitle("Custom Pie");
+        pieModel2.setTitle("Statistiques périodique des banques en %");
         pieModel2.setLegendPosition("e");
         pieModel2.setFill(false);
         pieModel2.setShowDataLabels(true);
         pieModel2.setDiameter(150);
+    
     }
-    
-    
+     
+       
+    public void doStatistiquesBancaire(){
+    	createPieModel();
+    	}
     
 	public List<Banque> getBanques() {
 		return banques;

@@ -52,16 +52,15 @@ public class EtatCategoriesCtr implements Serializable {
 		calendar.add(calendar.MINUTE, 59);
 		calendar.add(calendar.SECOND, 59);
 		end = calendar.getTime();
-		System.err.println(start + "   " + end);
 		etats = transactionEJBLocal.calculEtat(start, end, id_banque);
+		System.err.println(id_banque);
 		for (Etat etat : etats) {
 			total_nbr += etat.getNbr();
 			total_montant += etat.getSomme();
 		}
 		etatSousCategories = transactionEJBLocal.calculeEtatSousCategorie(
 				start, end, id_banque);
-		banque = banqueEJBLocal.findById(id_banque);
-	}
+		}
 
 	public Banque getBanque() {
 		return banque;

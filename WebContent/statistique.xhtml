@@ -1,20 +1,29 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-       xmlns:p="http://primefaces.org/ui"
-       template="/template/template.xhtml"> 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
 	<ui:define name="title"> Statistique</ui:define>
 
 	<ui:define name="content">
-
+	<h1>Statistiques des banques : </h1>
+	<h:form id= "cam">
+		<h:panelGrid columns="5" cellpadding="5">
 		
-		<p:chart type="pie" model="#{statistiqueCtr.pieModel1}" style="width:400px;height:300px" />
-             
-		<p:chart type="pie" model="#{statistiqueCtr.pieModel2}" style="width:400px;height:300px" />
-
-
-
+			<p:outputLabel value="Periode Du :" />
+					<p:calendar id="popup" value="#{statistiqueCtr.start}" />
+					<p:outputLabel value="Au :" />
+					<p:calendar id="popup2" value="#{statistiqueCtr.end}" />
+					<p:commandButton value="Valider"
+						action="#{statistiqueCtr.doStatistiquesBancaire()}" onclick="rendered"></p:commandButton>
+			</h:panelGrid>	
+		<h:panelGrid columns="2">
+			<p:chart type="pie" model="#{statistiqueCtr.pieModel1}"
+				style="width:400px;height:300px" />
+			<p:chart type="pie" model="#{statistiqueCtr.pieModel2}"
+				style="width:400px;height:300px" />
+		</h:panelGrid>
+	</h:form>
 	</ui:define>
 </ui:composition>
