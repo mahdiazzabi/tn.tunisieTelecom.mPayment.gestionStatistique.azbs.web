@@ -51,7 +51,7 @@ img {
 	padding: 27px 0;
 }
 #header > div, #footer > div {
-	width: 920px;
+	width: 970px;
 	margin: 0 auto;
 	padding: 0 20px;
 }
@@ -61,12 +61,12 @@ img {
 	margin-right: 20px;
 }
 #header .logo a {
-	background: url(../images/logoTT.png) no-repeat center top;
+	background: url(../images/TTC_120.png) no-repeat center top;
 	color: #000;
 	display: block;
 	font: 15px/30px 'Play';
-	height: 20px;
-	width: 99px;
+	height: 76px;
+	width: 140px;
 	padding-top: 68px;
 	text-decoration: none;
 	text-transform: uppercase;
