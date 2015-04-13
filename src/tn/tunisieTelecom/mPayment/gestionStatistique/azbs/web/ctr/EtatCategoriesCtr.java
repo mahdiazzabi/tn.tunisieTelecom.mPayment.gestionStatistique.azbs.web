@@ -16,6 +16,7 @@ import org.primefaces.event.SelectEvent;
 
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Banque;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.BanqueEJBLocal;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.FichierEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.TransactionEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.util.Etat;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.util.EtatSousCategorie;
@@ -43,24 +44,50 @@ public class EtatCategoriesCtr implements Serializable {
 	@EJB
 	BanqueEJBLocal banqueEJBLocal;
 
+	@EJB
+	FichierEJBLocal fichierEJBLocal;
+
 	public void doEtatCategorie() {
-		total_montant = 0;
-		total_nbr = 0;
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(end);
-		calendar.add(calendar.HOUR_OF_DAY, +23);
-		calendar.add(calendar.MINUTE, 59);
-		calendar.add(calendar.SECOND, 59);
-		end = calendar.getTime();
-		etats = transactionEJBLocal.calculEtat(start, end, id_banque);
-		System.err.println(id_banque);
-		for (Etat etat : etats) {
-			total_nbr += etat.getNbr();
-			total_montant += etat.getSomme();
+		
+		etats = new ArrayList<Etat>();
+		etatSousCategories= new ArrayList<EtatSousCategorie>();
+		if (end.before(start)) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN,
+							"Attention : ", "Intervale de temps incorrect."));
+		} else {
+			if (!fichierEJBLocal.verif_traitement_for_stat(start, end,
+					id_banque)) {
+				FacesContext
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(FacesMessage.SEVERITY_ERROR,
+										"Attention : ",
+										"Un ou plusieurs fichiers n'ont pas était traités pour la date selectionée."));
+			} else {
+				total_montant = 0;
+				total_nbr = 0;
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(end);
+				calendar.add(calendar.HOUR_OF_DAY, +23);
+				calendar.add(calendar.MINUTE, 59);
+				calendar.add(calendar.SECOND, 59);
+				end = calendar.getTime();
+				etats = transactionEJBLocal.calculEtat(start, end, id_banque);
+				for (Etat etat : etats) {
+					total_nbr += etat.getNbr();
+					total_montant += etat.getSomme();
+				}
+				etatSousCategories = transactionEJBLocal
+						.calculeEtatSousCategorie(start, end, id_banque);
+
+			}
+
 		}
-		etatSousCategories = transactionEJBLocal.calculeEtatSousCategorie(
-				start, end, id_banque);
-		}
+
+	}
 
 	public Banque getBanque() {
 		return banque;

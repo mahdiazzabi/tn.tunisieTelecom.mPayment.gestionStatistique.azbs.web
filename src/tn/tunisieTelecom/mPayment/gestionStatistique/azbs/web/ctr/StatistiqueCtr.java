@@ -162,16 +162,10 @@ public class StatistiqueCtr {
 
 	private void createLineModels() {
 		lineModel1 = initLinearModel();
-		lineModel1.setTitle("Linear Chart");
+		lineModel1.setTitle("Evolution des ventes pour le mois : "
+				+ monthSelected);
 		lineModel1.setLegendPosition("e");
-		org.primefaces.model.chart.Axis yAxis = lineModel1.getAxis(AxisType.Y);
-		yAxis.setMin(0);
-		yAxis.setMax(4000);
-		org.primefaces.model.chart.Axis xAxis = lineModel1.getAxis(AxisType.X);
-		xAxis.setMin(1);
-		xAxis.setMax(31);
-
-	}
+			}
 
 	private LineChartModel initLinearModel() {
 		LineChartModel model = new LineChartModel();
@@ -187,7 +181,8 @@ public class StatistiqueCtr {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		Double montant = 0.0 ;
+		Double max = 0.0;
 		for (SousCategories sousCategories : sousCategories) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
@@ -196,21 +191,28 @@ public class StatistiqueCtr {
 			LineChartSeries series1 = new LineChartSeries();
 			series1.setLabel(sousCategories.getLibelle());
 			Date d = calendar.getTime();
-
 			for (int i = 1; i <= nbr_jour_mois; i++) {
-				// series1.set(i,
-				// transactionEJBLocal.calculChiffreAffaireTT_journalier());
-
-				series1.set(i, transactionEJBLocal.calculStatMensuelle(d,
-						sousCategories.getId()));
+				montant =  transactionEJBLocal.calculStatMensuelle(d,
+						sousCategories.getId())	;
+				series1.set(i, montant);
+				if (montant > max) {
+					max = montant ;
+				}
 				calendar.add(calendar.DATE, +1);
 				d = calendar.getTime();
-
 			}
+			org.primefaces.model.chart.Axis yAxis = model.getAxis(AxisType.Y);
+			yAxis.setMin(0);
+			yAxis.setMax(max + 500);
+			yAxis.setTickCount(7);
+			org.primefaces.model.chart.Axis xAxis = model.getAxis(AxisType.X);
+			xAxis.setMin(1);
+			xAxis.setMax(31);
+			xAxis.setTickCount(31);
 
 			model.addSeries(series1);
 		}
-
+		
 		return model;
 	}
 

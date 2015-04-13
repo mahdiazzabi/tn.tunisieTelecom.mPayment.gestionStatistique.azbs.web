@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	<ui:define name="title"> Realiser etat statistique</ui:define>
+
+	<ui:define name="content">
+		<h:panelGrid columns="2">
+			<h:form id="form">
+				<p:growl id="msg" showDetail="true" />
+				<p:growl id="msgs" showDetail="true" />
+				<h:panelGrid columns="6" style="margin-right:80px">
+					<h:outputLabel value="Banque :" />
+					<p:selectOneMenu value="#{etatCategoriesCtr.id_banque}">
+						<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
+							itemValue="#{banq.id}" itemLabel="#{banq.nom}" />
+					</p:selectOneMenu>
+					<p:outputLabel value="Du :" />
+					<p:calendar id="popup" value="#{etatCategoriesCtr.start}" />
+					<p:outputLabel value="Au :" />
+					<p:calendar id="popup2" value="#{etatCategoriesCtr.end}" />
+					<p:commandButton value="Valider"
+						action="#{etatCategoriesCtr.doEtatCategorie()}" onclick="rendered"></p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</h:panelGrid>
+
+		<h:form id="myform">
+
+			<p:dataTable id="tbl" value="#{etatCategoriesCtr.etats}" var="l"
+				rows="6" rowKey="#{l.id}"
+				selection="#{etatCategoriesCtr.selectedEtat}">
+				<f:facet name="header">
+		            	Etat statistique de la banque : #{etatCategoriesCtr.banque.nom} Du #{etatCategoriesCtr.start.toLocaleString()} au #{etatCategoriesCtr.end.toLocaleString()}
+		            	 	</f:facet>
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column rowspan="2" colspan="3" headerText="Catégories" />
+						<p:column rowspan="2" colspan="2"
+							headerText="Nombre des transactions" />
+						<p:column rowspan="2" colspan="2"
+							headerText="Montant total (en dt)" />
+					</p:row>
+				</p:columnGroup>
+
+				<p:column rowspan="1" colspan="3" headerText="Categories">
+					<h:outputLabel value="#{l.libelle}" />
+				</p:column>
+				<p:column rowspan="1" colspan="2"
+					headerText="Nombre des transaction">
+					<h:outputLabel value="#{l.nbr}" />
+				</p:column>
+				<p:column rowspan="1" colspan="2" headerText="Montant Total">
+					<h:outputLabel value="#{l.somme}" />
+				</p:column>
+
+				<p:columnGroup type="footer">
+					<p:row>
+						<p:column colspan="3" style="text-align:right"
+							footerText="Totals:" />
+						<p:column colspan="2" footerText="#{etatCategoriesCtr.total_nbr}" />
+
+						<p:column colspan="2"
+							footerText="#{etatCategoriesCtr.total_montant}" />
+					</p:row>
+				</p:columnGroup>
+
+				<f:facet name="footer">
+
+				</f:facet>
+
+			</p:dataTable>
+
+			<br />
+
+			<br />
+
+			<p:dataTable id="sousCatDT"
+				value="#{etatCategoriesCtr.etatSousCategories}" var="l" rows="10"
+				rowKey="#{l.libelle}">
+				<f:facet name="header">
+		            	Détails des sous categories 
+        			</f:facet>
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column rowspan="2" colspan="3" headerText="Sous Catégories" />
+						<p:column rowspan="2" colspan="2"
+							headerText="Nombre des transactions" />
+						<p:column rowspan="2" colspan="2"
+							headerText="Montant total (en dt)" />
+					</p:row>
+				</p:columnGroup>
+
+				<p:column rowspan="1" colspan="3" headerText="Sous Categories">
+					<h:outputLabel value="#{l.libelle}" />
+				</p:column>
+				<p:column rowspan="1" colspan="2"
+					headerText="Nombre des transaction">
+					<h:outputLabel value="#{l.nbr}" />
+				</p:column>
+				<p:column rowspan="1" colspan="2" headerText="Montant Total">
+					<h:outputLabel value="#{l.somme}" />
+				</p:column>
+			</p:dataTable>
+
+			<br />
+
+			<br />
+
+			<h:panelGrid columns="2">
+
+					<h:commandLink>
+						<p:graphicImage value="/ressources/images/pdf-2.png" />
+						<p:dataExporter type="pdf" target="tbl" fileName="Etat" />
+					</h:commandLink>
+					<h:commandLink>
+						<p:graphicImage value="/ressources/images/Excel.png" />
+						<p:dataExporter type="xls" target="tbl" fileName="Etat" />
+					</h:commandLink>
+
+			</h:panelGrid>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -7,15 +7,36 @@
 	<ui:define name="title"> espace admin</ui:define>
 
 	<ui:define name="content">
-		<h1>ESPACE ADMIN</h1>
-			
-			<p:panelGrid columns="2">
-				
-				<div class="Menu">
-				<a href="index.html"></a>
-			</div>
-			
-			</p:panelGrid>
-
+		<ul class="ca-menu">
+			<li><a href="transaction.jsf"> <span class="ca-icon"><img
+						src="../ressources/images/File.png" /> </span>
+					<div class="ca-content">
+						<br /> <br />
+						<h2 class="ca-main">Traitement des fichiers</h2>
+					</div>
+			</a></li>
+			<li><a href="etat.jsf"> <span class="ca-icon"><img
+						src="../ressources/images/Etat.png" /> </span>
+					<div class="ca-content">
+						<br /> <br />
+						<h2 class="ca-main">Etablir etat statistiques</h2>
+					</div>
+			</a></li>
+			<li><a href="StatistiqueIndex.jsf"> <br /> <span class="ca-icon">
+						<img src="../ressources/images/pie-chart.png" />
+				</span>
+					<div class="ca-content">
+						<br /> <br />
+						<h2 class="ca-main">Statistiques</h2>
+					</div>
+			</a></li>
+			<li><a href="gestionBase.jsf"> <br /> <span class="ca-icon"><img
+						src="../ressources/images/MySql.png" /> </span>
+					<div class="ca-content">
+						<br /> <br />
+						<h2 class="ca-main">Gestion de la Base</h2>
+					</div>
+			</a></li>
+		</ul>
 	</ui:define>
 </ui:composition>
