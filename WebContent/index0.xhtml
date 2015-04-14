@@ -3,16 +3,20 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateIndex.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateIndex.xhtml">
 
 	<ui:define name="title"> authentification</ui:define>
 
 	<ui:define name="content">
+
 		<p:panel>
-		
-				<br />
+
+			<br />
 			<h1>Authentification</h1>
 			<h:form>
+				<p:growl id="growl" showDetail="true"  />
+
 				<h:panelGrid columns="2" cellpadding="5">
 					<h:outputLabel value="Login" />
 					<p:inputText value="#{userCtr.login}" />
@@ -21,7 +25,7 @@
 				</h:panelGrid>
 				<br />
 				<h:panelGrid columns="2" cellpadding="5">
-					<p:commandButton action="#{userCtr.doLogin()}" value="Valider"></p:commandButton>
+					<p:commandButton action="#{userCtr.doLogin()}" value="Valider"  update="growl"></p:commandButton>
 					<p:commandButton value="Annuler"></p:commandButton>
 				</h:panelGrid>
 				<br />
