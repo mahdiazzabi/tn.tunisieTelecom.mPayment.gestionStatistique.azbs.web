@@ -40,6 +40,8 @@ public class StatistiqueCtr {
 	private PieChartModel pieModel4 = new PieChartModel();
 	private PieChartModel pieModelBanqueSousCatMontant = new PieChartModel();
 	private PieChartModel pieModelBanqueSousCatNombre = new PieChartModel();
+	private PieChartModel pieModelBanqueSousCatMontantpourcent = new PieChartModel();
+	private PieChartModel pieModelBanqueSousCatNombrepourcent = new PieChartModel();
 
 	private List<Banque> banques = new ArrayList<Banque>();
 	private Date start;
@@ -61,9 +63,11 @@ public class StatistiqueCtr {
 	private void createPieModelBanqueSousCat() {
 		pieModelBanqueSousCatMontant = new PieChartModel();
 		pieModelBanqueSousCatNombre = new PieChartModel();
+		pieModelBanqueSousCatMontantpourcent = new PieChartModel();
+		pieModelBanqueSousCatNombrepourcent = new PieChartModel();
 
 		sousCategories = sousCategotiesEJBLocal.findAll();
-
+		Banque banque = banqueEJBlocal.findById(idBanque);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(end);
 		calendar.add(calendar.HOUR_OF_DAY, +23);
@@ -77,24 +81,42 @@ public class StatistiqueCtr {
 			System.err.println(object[0] + "  " + object[1]);
 			if (object[1] == null) {
 				pieModelBanqueSousCatMontant
-						.set(sousCategories.getLibelle(), 0);
+				.set(sousCategories.getLibelle(), 0);
+				pieModelBanqueSousCatMontantpourcent
+				.set(sousCategories.getLibelle(), 0);
 				pieModelBanqueSousCatNombre.set(sousCategories.getLibelle(), 0);
+				pieModelBanqueSousCatNombrepourcent.set(sousCategories.getLibelle(), 0);
 
 			} else {
 				pieModelBanqueSousCatMontant.set(sousCategories.getLibelle(),
 						Double.parseDouble("" + object[1]));
+				pieModelBanqueSousCatMontantpourcent.set(sousCategories.getLibelle(),
+						Double.parseDouble("" + object[1]));
 				pieModelBanqueSousCatNombre.set(sousCategories.getLibelle(),
 						Double.parseDouble("" + object[0]));
-
+				pieModelBanqueSousCatNombrepourcent.set(sousCategories.getLibelle(),
+						Double.parseDouble("" + object[0]));
 			}
-			pieModelBanqueSousCatMontant
-					.setTitle("Statistiques périodique des banques");
-			pieModelBanqueSousCatMontant.setLegendPosition("w");
-
-			pieModelBanqueSousCatNombre
-					.setTitle("Statistiques périodique des banques");
-			pieModelBanqueSousCatNombre.setLegendPosition("w");
 		}
+		pieModelBanqueSousCatMontant
+				.setTitle("Statistiques de la banque "+ banque.getNom() + " exprimés en montant");
+		pieModelBanqueSousCatMontant.setLegendPosition("w");
+
+		pieModelBanqueSousCatNombre
+				.setTitle("Statistiques de la banque "+ banque.getNom() + " en nombre de transactions");
+		pieModelBanqueSousCatNombre.setLegendPosition("w");
+		
+		pieModelBanqueSousCatMontantpourcent.setTitle("Statistiques des Sous categories pour la banque "+ banque.getNom() + " en montant");
+		pieModelBanqueSousCatMontantpourcent.setLegendPosition("e");
+		pieModelBanqueSousCatMontantpourcent.setFill(false);
+		pieModelBanqueSousCatMontantpourcent.setShowDataLabels(true);
+		pieModelBanqueSousCatMontantpourcent.setDiameter(150);
+		pieModelBanqueSousCatNombrepourcent.setTitle("Statistiques des Sous categories pour la banque "+ banque.getNom() + " en nombre de transactions");
+		pieModelBanqueSousCatNombrepourcent.setLegendPosition("e");
+		pieModelBanqueSousCatNombrepourcent.setFill(false);
+		pieModelBanqueSousCatNombrepourcent.setShowDataLabels(true);
+		pieModelBanqueSousCatNombrepourcent.setDiameter(150);
+		
 	}
 
 	private void createPieModel() {
@@ -129,25 +151,28 @@ public class StatistiqueCtr {
 				pieModel4.set(banque.getNom(),
 						Double.parseDouble("" + object[0]));
 			}
-			System.err.println(banque.getNom());
 		}
 
-		pieModel1.setTitle("Statistiques périodique des banques");
+		pieModel1.setTitle("Statistiques des banques exprimés en montant");
 		pieModel1.setLegendPosition("w");
 
-		pieModel2.setTitle("Statistiques périodique des banques en %");
+		pieModel2.setTitle("Statistiques des banques exprimés en montant");
 		pieModel2.setLegendPosition("e");
 		pieModel2.setFill(false);
 		pieModel2.setShowDataLabels(true);
 		pieModel2.setDiameter(150);
-		pieModel3.setTitle("en nombre");
+		pieModel3.setTitle("Statistiques des banques exprimés en nombre de transactions");
 		pieModel3.setLegendPosition("w");
-		pieModel4.setTitle("en nombre %");
+		pieModel4.setTitle("Statistiques des banques exprimés en nombre de transactions");
 		pieModel4.setLegendPosition("e");
 		pieModel4.setFill(false);
 		pieModel4.setShowDataLabels(true);
 		pieModel4.setDiameter(150);
 
+	}
+
+	public void doStatistiquesParBanque() {
+		createPieModelBanqueSousCat();
 	}
 
 	public void doStatistiquesBancaire() {
@@ -165,7 +190,7 @@ public class StatistiqueCtr {
 		lineModel1.setTitle("Evolution des ventes pour le mois : "
 				+ monthSelected);
 		lineModel1.setLegendPosition("e");
-			}
+	}
 
 	private LineChartModel initLinearModel() {
 		LineChartModel model = new LineChartModel();
@@ -181,7 +206,7 @@ public class StatistiqueCtr {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Double montant = 0.0 ;
+		Double montant = 0.0;
 		Double max = 0.0;
 		for (SousCategories sousCategories : sousCategories) {
 			Calendar calendar = Calendar.getInstance();
@@ -192,11 +217,11 @@ public class StatistiqueCtr {
 			series1.setLabel(sousCategories.getLibelle());
 			Date d = calendar.getTime();
 			for (int i = 1; i <= nbr_jour_mois; i++) {
-				montant =  transactionEJBLocal.calculStatMensuelle(d,
-						sousCategories.getId())	;
+				montant = transactionEJBLocal.calculStatMensuelle(d,
+						sousCategories.getId());
 				series1.set(i, montant);
 				if (montant > max) {
-					max = montant ;
+					max = montant;
 				}
 				calendar.add(calendar.DATE, +1);
 				d = calendar.getTime();
@@ -212,7 +237,7 @@ public class StatistiqueCtr {
 
 			model.addSeries(series1);
 		}
-		
+
 		return model;
 	}
 
@@ -305,22 +330,41 @@ public class StatistiqueCtr {
 		this.lineModel1 = lineModel1;
 	}
 
-	// public PieChartModel getPieModelBanqueSousCatMontant() {
-	// return pieModelBanqueSousCatMontant;
-	// }
-	//
-	// public void setPieModelBanqueSousCatMontant(
-	// PieChartModel pieModelBanqueSousCatMontant) {
-	// this.pieModelBanqueSousCatMontant = pieModelBanqueSousCatMontant;
-	// }
-	//
-	// public PieChartModel getPieModelBanqueSousCatNombre() {
-	// return pieModelBanqueSousCatNombre;
-	// }
-	//
-	// public void setPieModelBanqueSousCatNombre(
-	// PieChartModel pieModelBanqueSousCatNombre) {
-	// this.pieModelBanqueSousCatNombre = pieModelBanqueSousCatNombre;
-	// }
+	public PieChartModel getPieModelBanqueSousCatMontant() {
+		return pieModelBanqueSousCatMontant;
+	}
 
+	public void setPieModelBanqueSousCatMontant(
+			PieChartModel pieModelBanqueSousCatMontant) {
+		this.pieModelBanqueSousCatMontant = pieModelBanqueSousCatMontant;
+	}
+
+	public PieChartModel getPieModelBanqueSousCatNombre() {
+		return pieModelBanqueSousCatNombre;
+	}
+
+	public void setPieModelBanqueSousCatNombre(
+			PieChartModel pieModelBanqueSousCatNombre) {
+		this.pieModelBanqueSousCatNombre = pieModelBanqueSousCatNombre;
+	}
+
+	public PieChartModel getPieModelBanqueSousCatMontantpourcent() {
+		return pieModelBanqueSousCatMontantpourcent;
+	}
+
+	public void setPieModelBanqueSousCatMontantpourcent(
+			PieChartModel pieModelBanqueSousCatMontantpourcent) {
+		this.pieModelBanqueSousCatMontantpourcent = pieModelBanqueSousCatMontantpourcent;
+	}
+
+	public PieChartModel getPieModelBanqueSousCatNombrepourcent() {
+		return pieModelBanqueSousCatNombrepourcent;
+	}
+
+	public void setPieModelBanqueSousCatNombrepourcent(
+			PieChartModel pieModelBanqueSousCatNombrepourcent) {
+		this.pieModelBanqueSousCatNombrepourcent = pieModelBanqueSousCatNombrepourcent;
+	}
+
+	
 }

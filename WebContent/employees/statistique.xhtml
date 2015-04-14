@@ -7,7 +7,7 @@
 	<ui:define name="title"> Statistique</ui:define>
 
 	<ui:define name="content">
-		<h1>Statistiques des banques :</h1>
+		<h1>Statistiques des Sous Catégories mensuelle :</h1>
 		<h:form id="cam">
 			<h:panelGrid columns="5" cellpadding="5">
 
@@ -33,21 +33,6 @@
 					style="width:400px;height:300px" />
 
 			</h:panelGrid>
-		</h:form>
-
-		<h:form>
-
-			<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
-				<div id="datepicker"></div>
-
-				<h:inputText class="mycal" value="#{statistiqueCtr.monthSelected}" />
-				<p:commandButton value="Analyser" ajax="false"
-					action="#{statistiqueCtr.doStatistiqueMensuelle()}"
-					disabled="false" />
-			</h:panelGrid>
-			<p:chart type="line" model="#{statistiqueCtr.lineModel1}"
-				style="height:400px;width:806px;" />
-
 		</h:form>
 
 	</ui:define>

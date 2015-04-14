@@ -45,17 +45,36 @@ public class UserAfterLogin implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-
-//		boolean letGo = true;
+//		
+//	UserCtr loginBean = (UserCtr)((HttpServletRequest)request).getSession().getAttribute("loginBean");
+//		
+//		if (loginBean == null || !loginBean.isLoggedIn()) {
+//			String contextPath = ((HttpServletRequest)request).getContextPath();
+//			((HttpServletResponse)response).sendRedirect(contextPath + "/index.jsf");
+//			}else
+//				chain.doFilter(request, response);
+//		
 //		HttpServletRequest req = (HttpServletRequest) request;
 //		HttpServletResponse resp = (HttpServletResponse) response;
-//		UserCtr userCtr = (UserCtr) req.getSession().getAttribute("UserCtr");
+//		System.err.println("OK1");
+//		UserCtr userCtr = (UserCtr) req.getSession(true).getAttribute("UserCtr");
+//		String pageRequested = req.getRequestURL().toString();
+//		
+//		if (req.getSession(true).getAttribute("UserCtr") == null && !pageRequested.contains("index.jsf")) {
+//			resp.sendRedirect(req.getContextPath() + "/index.jsf");
+//				
+//		}else {
+//			chain.doFilter(request, response);
+//			}
 //		if (userCtr.isLoggedIn()) {
 //			letGo = true;
+//			System.err.println("OK3");
 //		}
 //		if (letGo) {
+//			System.err.println("OK4");
 //			chain.doFilter(request, response);
 //		} else {
+//			System.err.println("OK5");
 //			resp.sendRedirect(req.getContextPath() + "/index.jsf");
 //		}
 	}
@@ -64,7 +83,7 @@ public class UserAfterLogin implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
+		
 	}
 
 }

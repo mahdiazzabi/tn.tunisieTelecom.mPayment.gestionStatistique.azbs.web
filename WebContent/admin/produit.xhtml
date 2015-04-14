@@ -8,7 +8,7 @@
 
 
 	<ui:define name="content">
-		<h1>Produit</h1>
+		<h1>Gestion des produits</h1>
 		<h:form id="form">
 			<p:dataTable id="basicDT" var="prod"
 				value="#{produitCtr.doFindall()}" rows="6" rowKey="#{prod.id}"
@@ -19,7 +19,6 @@
 				<f:facet name="header">
 	          	List des produits
 	        </f:facet>
-	        
 				<p:column headerText="Id">
 					<h:outputText value="#{prod.id}" />
 				</p:column>
@@ -34,62 +33,55 @@
 				</p:column>
 			</p:dataTable>
 		</h:form>
-
 		<br />
 		<br />
-
 		<p:panel id="details">
-
-			<div>
-				<center>
-					<h2>Details Produit</h2>
-				</center>
-				<h:panelGrid columns="2">
-					<h:form id="update">
-						<h:panelGrid columns="2" style="margin-right:80px">
-							<h:outputLabel value="Id" />
-							<p:inputText value="#{produitCtr.selectedProduit.ref}" />
-							<h:outputLabel value="libelle" />
-							<p:inputText value="#{produitCtr.selectedProduit.libelle}" />
-							<h:outputLabel value="categories" />
-							<p:inputText readonly="true"
-								value="#{produitCtr.selectedProduit.sousCategories.libelle}"></p:inputText>
-
-							<p:commandButton value="Update" update=":form:basicDT"
-								rendered="#{not empty produitCtr.selectedProduit}"
-								onclick="if (! confirm('Really want to do that?')) return false"
-								action="#{produitCtr.update()}"></p:commandButton>
-							<p:commandButton value="Delete" update=":form:basicDT"
-								rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
-								onclick="if (! confirm('Really want to do that?')) return false"
-								action="#{produitCtr.delete()}"></p:commandButton>
-						</h:panelGrid>
-					</h:form>
-
-					<h:form id="ajout">
-						<h:panelGrid columns="2">
-							<h:outputLabel value="Sous Categorie" />
-							<p:selectOneMenu value="#{produitCtr.idSousCat}">
-								<f:selectItems var="sousCat"
-									value="#{sousCategoriesCtr.findAll()}"
-									itemValue="#{sousCat.id}" itemLabel="#{sousCat.libelle}" />
-							</p:selectOneMenu>
-							<h:outputLabel value="Reference " />
-							<p:inputText value="#{produitCtr.produit.ref}" />
-
-							<h:outputLabel value="Libelle" />
-							<p:inputText value="#{produitCtr.produit.libelle}" />
-
-							<p:commandButton id="dd" value="Add" update=":form:basicDT"
-								action="#{produitCtr.add}"></p:commandButton>
-						</h:panelGrid>
-					</h:form>
-				</h:panelGrid>
-			</div>
-
+			<h3>Détails Produit</h3>
+			<h:panelGrid columns="2">
+				<h:form id="update">
+					<h:panelGrid columns="2" style="margin-right:80px">
+						<h:outputLabel value="Référence" />
+						<p:inputText value="#{produitCtr.selectedProduit.ref}" />
+						<h:outputLabel value="Libellé" />
+						<p:inputText value="#{produitCtr.selectedProduit.libelle}" />
+						<h:outputLabel value="Sous-Catégorie" />
+						<p:selectOneMenu value="#{produitCtr.idSousCat}">
+							<f:selectItems var="sousCat"
+								value="#{sousCategoriesCtr.findAll()}" itemValue="#{sousCat.id}"
+								itemLabel="#{sousCat.libelle}" />
+						</p:selectOneMenu>
+						<p:commandButton value="Modifier" update=":form:basicDT"
+							rendered="#{not empty produitCtr.selectedProduit}"
+							onclick="if (! confirm('Really want to do that?')) return false"
+							action="#{produitCtr.update()}"></p:commandButton>
+						<p:commandButton value="Supprimer" update=":form:basicDT"
+							rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
+							onclick="if (! confirm('Really want to do that?')) return false"
+							action="#{produitCtr.delete()}"></p:commandButton>
+					</h:panelGrid>
+				</h:form>
+			</h:panelGrid>
 		</p:panel>
-
-
-
+		<br />
+		<p:panel id="Ajout">
+		
+			<h3>Ajouter un nouveau produit</h3>
+			<h:form id="ajout">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="Sous-Catégorie" />
+					<p:selectOneMenu value="#{produitCtr.idSousCat}">
+						<f:selectItems var="sousCat"
+							value="#{sousCategoriesCtr.findAll()}" itemValue="#{sousCat.id}"
+							itemLabel="#{sousCat.libelle}" />
+					</p:selectOneMenu>
+					<h:outputLabel value="Référence " />
+					<p:inputText value="#{produitCtr.produit.ref}" />
+					<h:outputLabel value="Libellé" />
+					<p:inputText value="#{produitCtr.produit.libelle}" />
+					<p:commandButton id="dd" value="Ajouter" update=":form:basicDT"
+						action="#{produitCtr.add}"></p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:panel>
 	</ui:define>
 </ui:composition>

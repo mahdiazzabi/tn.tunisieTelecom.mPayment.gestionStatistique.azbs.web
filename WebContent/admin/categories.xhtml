@@ -7,7 +7,7 @@
 	<ui:define name="title"> espace admin | categories</ui:define>
 
 	<ui:define name="content">
-		<h1>categories</h1>
+		<h1>Gestion des catégories</h1>
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="basicDT" var="cat" editable="true"
@@ -28,43 +28,40 @@
 		</h:form>
 		<br />
 		<br />
-
 		<p:panel id="details">
-
 			<div>
-				<center>
-					<h2>Details</h2>
-				</center>
-				<h:panelGrid columns="2">
-					<h:form>
-						<h:panelGrid columns="2" style="margin-right:80px">
-							<h:outputLabel value="Id" />
-							<p:inputText value="#{categoriesCtr.setectedCategories.id}"
-								readonly="true" />
-							<h:outputLabel value="libelle" />
-							<p:inputText value="#{categoriesCtr.setectedCategories.libelle}" />
-							<p:commandButton value="Update" update=":form:basicDT"
-								rendered="#{not empty categoriesCtr.setectedCategories}"
-								onclick="if (! confirm('Really want to do that?')) return false"
-								action="#{categoriesCtr.updateCat()}"></p:commandButton>
-							<p:commandButton value="Delete" update=":form:basicDT"
-								rendered="#{not empty categoriesCtr.setectedCategories}"
-								onclick="if (! confirm('Really want to do that?')) return false"
-								action="#{categoriesCtr.deleteCat()}"></p:commandButton>
-						</h:panelGrid>
-					</h:form>
-					<h:form>
-						<h:panelGrid columns="2">
-							<h:outputLabel value="Libelle" />
-							<p:inputText value="#{categoriesCtr.categorie.libelle}" />
-							<p:commandButton value="Add" update=":form:basicDT"
-								action="#{categoriesCtr.add()}"></p:commandButton>
-						</h:panelGrid>
-					</h:form>
-				</h:panelGrid>
+				<h2>Détails Catégories</h2>
+				<h:form>
+					<h:panelGrid columns="2">
+						<h:outputLabel value="Id" />
+						<p:inputText value="#{categoriesCtr.setectedCategories.id}"
+							readonly="true" />
+						<h:outputLabel value="Libellé" />
+						<p:inputText value="#{categoriesCtr.setectedCategories.libelle}" />
+						<p:commandButton value="Update" update=":form:basicDT"
+							rendered="#{not empty categoriesCtr.setectedCategories}"
+							onclick="if (! confirm('Really want to do that?')) return false"
+							action="#{categoriesCtr.updateCat()}"></p:commandButton>
+						<p:commandButton value="Delete" update=":form:basicDT"
+							rendered="#{not empty categoriesCtr.setectedCategories}"
+							onclick="if (! confirm('Really want to do that?')) return false"
+							action="#{categoriesCtr.deleteCat()}"></p:commandButton>
+					</h:panelGrid>
+				</h:form>
 			</div>
-
 		</p:panel>
-
+		<br />
+		<p:panel id="Ajout">
+			<h2>Ajout nouvelle catégorie</h2>
+			<br />
+			<h:form>
+				<h:panelGrid columns="3" cellspacing="10px">
+					<h:outputLabel value="Libellé " />
+					<p:inputText value="#{categoriesCtr.categorie.libelle}" />
+					<p:commandButton value="Add" update=":form:basicDT"
+						action="#{categoriesCtr.add()}"></p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:panel>
 	</ui:define>
 </ui:composition>

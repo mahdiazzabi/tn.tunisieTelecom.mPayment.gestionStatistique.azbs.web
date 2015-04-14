@@ -5,6 +5,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Admin;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Employees;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.User;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.UserEJBLocal;
 
@@ -23,12 +24,16 @@ public class UserCtr {
 		if ((user = userEJBLocal.doLogin(login, mdp)) == null) {
 			// redirecTo = "index.jsf?faces-redirect=true";
 		} else {
+			loggedIn = true;
 			if (user instanceof Admin) {
-				loggedIn = true;
+				
 				redirecTo = "/admin/index.jsf?faces-redirect=true";
-			} else {
+			} else if ((user instanceof Employees)) {
 				redirecTo = "/employees/index.jsf?faces-redirect=true";
-			}
+
+			} else
+				redirecTo = "/employeesMpayement/index.jsf?faces-redirect=true";
+
 		}
 		return redirecTo;
 	}

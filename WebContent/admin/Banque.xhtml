@@ -5,17 +5,16 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
 	<ui:define name="title"> espace admin | banque</ui:define>
-
-<ui:define name="content">
+	<ui:define name="content">
 		<h1>Banques</h1>
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="basicDT" var="banq"
-				value="#{banqueCtr.listeBanque()}" rows="6"
-				rowKey="#{banq.id}" paginatorPosition="bottom" selectionMode="single"
-				paginator="true" selection="#{banqueCtr.selectedBanque}">
+				value="#{banqueCtr.listeBanque()}" rows="6" rowKey="#{banq.id}"
+				paginatorPosition="bottom" selectionMode="single" paginator="true"
+				selection="#{banqueCtr.selectedBanque}">
 				<p:ajax event="rowSelect" update=":details" />
-			
+
 				<f:facet name="header">
 	          	Liste des Banques
 	        </f:facet>
@@ -30,44 +29,37 @@
 		<br />
 		<br />
 		<p:panel id="details">
-
-			<div>
-				<center>
-					<h2>Details</h2>
-				</center>
-				<h:panelGrid columns="2">
-					<h:form>
-						<h:panelGrid columns="2" style="margin-right:80px">
-							<h:outputLabel value="Id" />
-							<p:inputText value="#{banqueCtr.selectedBanque.id}"
-								readonly="true" />
-							<h:outputLabel value="Nom" />
-							<p:inputText value="#{banqueCtr.selectedBanque.nom}" />
-							<p:commandButton value="Update" update=":form:basicDT"
-								rendered="#{not empty banqueCtr.selectedBanque}"
-								onclick="if (! confirm('Really want to do that?')) return false"
-								action="#{banqueCtr.update()}"></p:commandButton>
-							<p:commandButton value="Delete" update=":form:basicDT"
-								rendered="#{not empty banqueCtr.selectedBanque}"
-								onclick="if (! confirm('Really want to do that?')) return false"
-								action="#{banqueCtr.supprimer()}"></p:commandButton>
-								
-							</h:panelGrid>
-						</h:form>
-					
-					<h:form>
-						<h:panelGrid columns="2">
-							<h:outputLabel value="nom" />
-							<p:inputText value="#{banqueCtr.banque.nom}" />
-							<p:commandButton value="Add" update=":form:basicDT"
-								action="#{banqueCtr.add}"></p:commandButton>
-						</h:panelGrid>
-					</h:form>
-					
-				</h:panelGrid>
-			</div>
-
+			<h2>Détails banque</h2>
+			<h:panelGrid columns="2">
+				<h:form>
+					<h:panelGrid columns="2" style="margin-right:80px">
+						<h:outputLabel value="Id" />
+						<p:inputText value="#{banqueCtr.selectedBanque.id}"
+							readonly="true" />
+						<h:outputLabel value="Nom" />
+						<p:inputText value="#{banqueCtr.selectedBanque.nom}" />
+						<p:commandButton value="Modifier" update=":form:basicDT"
+							rendered="#{not empty banqueCtr.selectedBanque}"
+							onclick="if (! confirm('Really want to do that?')) return false"
+							action="#{banqueCtr.update()}"></p:commandButton>
+						<p:commandButton value="Supprimer" update=":form:basicDT"
+							rendered="#{not empty banqueCtr.selectedBanque}"
+							onclick="if (! confirm('Really want to do that?')) return false"
+							action="#{banqueCtr.supprimer()}"></p:commandButton>
+					</h:panelGrid>
+				</h:form>
+			</h:panelGrid>
 		</p:panel>
-
+		<br />
+		<p:panel id="Ajout">
+			<h:form>
+				<h:panelGrid columns="2">
+					<h:outputLabel value="Nom" />
+					<p:inputText value="#{banqueCtr.banque.nom}" />
+					<p:commandButton value="Ajouter" update=":form:basicDT"
+						action="#{banqueCtr.add}"></p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:panel>
 	</ui:define>
 </ui:composition>

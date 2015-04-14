@@ -7,7 +7,7 @@
 	<ui:define name="title"> espace admin | sous categories</ui:define>
 
 	<ui:define name="content">
-		<h1>sous categories</h1>
+		<h1>Gestion des sous-catégories</h1>
 		<h:form id="form">
 			<p:dataTable id="basicDT" var="cat"
 				value="#{sousCategoriesCtr.findAll()}" rows="6" rowKey="#{cat.id}"
@@ -30,54 +30,50 @@
 		</h:form>
 		<br />
 		<br />
-
 		<p:panel id="details">
-
-			<div>
-				<center>
-					<h2>Details</h2>
-				</center>
-				<h:panelGrid columns="2">
-					<h:form id="update">
-						<h:panelGrid columns="2" style="margin-right:80px">
-							<h:outputLabel value="Id" />
-							<p:inputText
-								value="#{sousCategoriesCtr.selectedSousCategories.id}"
-								readonly="true" />
-							<h:outputLabel value="lebelle" />
-							<p:inputText
-								value="#{sousCategoriesCtr.selectedSousCategories.libelle}" />
-							<h:outputLabel value="categories" />
-							<p:inputText readonly="true"
-								value="#{sousCategoriesCtr.selectedSousCategories.categories.libelle}"></p:inputText>
-							<p:commandButton value="Update" update=":form:basicDT"
-								rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
-								onclick="if (! confirm('Really want to do that?')) return false"
-								action="#{sousCategoriesCtr.update()}"></p:commandButton>
-							<p:commandButton value="Delete" update=":form:basicDT"
-								rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
-								onclick="if (! confirm('Really want to do that?')) return false"
-								action="#{sousCategoriesCtr.delete()}"></p:commandButton>
-						</h:panelGrid>
-					</h:form>
-					<h:form id="ajout">
-						<h:panelGrid columns="2">
-							<h:outputLabel value="categorie" />
-							<p:selectOneMenu value="#{sousCategoriesCtr.idCat}">
-								<f:selectItems var="sous"
-									value="#{categoriesCtr.listCategories()}"
-									itemValue="#{sous.id}" itemLabel="#{sous.libelle}" />
-							</p:selectOneMenu>
-							<h:outputLabel value="Libelle" />
-							<p:inputText value="#{sousCategoriesCtr.sousCategorie.libelle}" />
-							<p:commandButton id="dd" value="Add" update=":form:basicDT"
-								action="#{sousCategoriesCtr.add}"></p:commandButton>
-						</h:panelGrid>
-					</h:form>
-				</h:panelGrid>
-			</div>
-
+			<h3>Détails sous-catégorie</h3>
+			<h:panelGrid columns="2">
+				<h:form id="update">
+					<h:panelGrid columns="2" style="margin-right:80px">
+						<h:outputLabel value="Id" />
+						<p:inputText
+							value="#{sousCategoriesCtr.selectedSousCategories.id}"
+							readonly="true" />
+						<h:outputLabel value="Libellé" />
+						<p:inputText
+							value="#{sousCategoriesCtr.selectedSousCategories.libelle}" />
+						<h:outputLabel value="Catégorie" />
+						<p:inputText readonly="true"
+							value="#{sousCategoriesCtr.selectedSousCategories.categories.libelle}"></p:inputText>
+						<p:commandButton value="Modifier" update=":form:basicDT"
+							rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
+							onclick="if (! confirm('Really want to do that?')) return false"
+							action="#{sousCategoriesCtr.update()}"></p:commandButton>
+						<p:commandButton value="Supprimer" update=":form:basicDT"
+							rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
+							onclick="if (! confirm('Really want to do that?')) return false"
+							action="#{sousCategoriesCtr.delete()}"></p:commandButton>
+					</h:panelGrid>
+				</h:form>
+			</h:panelGrid>
 		</p:panel>
-
+		<br />
+		<p:panel id="Ajout">
+			<h3>Ajout nouvelle Sous-catégorie</h3>
+			<h:form id="ajout">
+				<h:panelGrid columns="2" cellspacing="10px">
+					<h:outputLabel value="Catégorie" />
+					<p:selectOneMenu value="#{sousCategoriesCtr.idCat}">
+						<f:selectItems var="sous"
+							value="#{categoriesCtr.listCategories()}" itemValue="#{sous.id}"
+							itemLabel="#{sous.libelle}" />
+					</p:selectOneMenu>
+					<h:outputLabel value="Libellé" />
+					<p:inputText value="#{sousCategoriesCtr.sousCategorie.libelle}" />
+					<p:commandButton id="dd" value="Add" update=":form:basicDT"
+						action="#{sousCategoriesCtr.add}"></p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:panel>
 	</ui:define>
 </ui:composition>
