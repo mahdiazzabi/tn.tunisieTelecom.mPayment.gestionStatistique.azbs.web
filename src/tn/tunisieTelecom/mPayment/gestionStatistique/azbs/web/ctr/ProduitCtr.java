@@ -16,6 +16,7 @@ import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.Sou
 @SessionScoped
 public class ProduitCtr {
 	private List<Produit> produits = new ArrayList<Produit>();
+	private List<SousCategories> sousCategories = new ArrayList<SousCategories>();
 	private Produit selectedProduit = new Produit();
 	private Produit produit = new Produit();
 
@@ -26,11 +27,17 @@ public class ProduitCtr {
 	@EJB
 	SousCategotiesEJBLocal sousCategotiesEJBLocal;
 
-	public List<Produit> doFindall() {
+
+	public List<Produit> charger_liste_produits() {
+
 		return produits = produitEJBLocal.findall();
+		
+	}
+	public List<SousCategories> charger_liste_sous_cat() {
+		return sousCategories = sousCategotiesEJBLocal.findAll();
 	}
 
-	public void add() {
+	public void ajouter_produit() {
 
 		produit.setSousCategories(sousCategotiesEJBLocal.findById(idSousCat));
 		for (Produit produit : produits) {
@@ -45,7 +52,7 @@ public class ProduitCtr {
 		produit = new Produit();
 	}
 
-	public void update() {
+	public void modifier_produit() {
 		for (Produit produit : produits) {
 			if (produit.getRef() == this.produit.getRef()) {
 				System.err.println("duplicate Ref for produit");
@@ -56,7 +63,7 @@ public class ProduitCtr {
 		produitEJBLocal.update(selectedProduit);
 	}
 
-	public void delete() {
+	public void supprimer_produit() {
 		produitEJBLocal.delete(selectedProduit);
 	}
 
@@ -92,4 +99,13 @@ public class ProduitCtr {
 		this.produit = produit;
 	}
 
+	public List<SousCategories> getSousCategories() {
+		return sousCategories;
+	}
+
+	public void setSousCategories(List<SousCategories> sousCategories) {
+		this.sousCategories = sousCategories;
+	}
+
+	
 }

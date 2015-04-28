@@ -47,10 +47,48 @@ public class EtatCategoriesCtr implements Serializable {
 	@EJB
 	FichierEJBLocal fichierEJBLocal;
 
-	public void doEtatCategorie() {
-		
+
+	
+	public void doEtatAllBanques() {
 		etats = new ArrayList<Etat>();
-		etatSousCategories= new ArrayList<EtatSousCategorie>();
+		if (end.before(start)) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN,
+							"Attention : ", "Intervale de temps incorrect."));
+		} else {
+			if (!fichierEJBLocal.verif_traitement_for_stat(start, end)) {
+				FacesContext
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(FacesMessage.SEVERITY_ERROR,
+										"Attention : ",
+										"Un ou plusieurs fichiers n'ont pas était traités pour la date selectionée."));
+			} else {
+				total_montant = 0;
+				total_nbr = 0;
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(end);
+				calendar.add(calendar.HOUR_OF_DAY, +23);
+				calendar.add(calendar.MINUTE, 59);
+				calendar.add(calendar.SECOND, 59);
+				end = calendar.getTime();
+				etats = transactionEJBLocal.calculEtatAllBanques(start, end);
+				for (Etat etat : etats) {
+					total_nbr += etat.getNbr();
+					total_montant += etat.getSomme();
+				}
+			}
+
+		}
+
+	}
+
+	public void doEtatCategorie() {
+
+		etats = new ArrayList<Etat>();
+		etatSousCategories = new ArrayList<EtatSousCategorie>();
 		if (end.before(start)) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,

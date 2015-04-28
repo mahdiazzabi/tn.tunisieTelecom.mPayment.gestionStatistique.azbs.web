@@ -126,10 +126,10 @@ img {
 #header {
 	background-color: #eee;
 	border-bottom: 1px solid #e6e6e6;
-	padding: 27px 0;
+	padding: 10px;
 }
 #header > div, #footer > div {
-	width: 970px;
+	width: 1120px;
 	margin: 0 auto;
 	padding: 0 20px;
 }
@@ -165,7 +165,7 @@ img {
 }
 #navigation li {
 	float: left;
-	width: 160px;
+	width: 170px;
 	text-align: center;
 }
 #navigation li a {

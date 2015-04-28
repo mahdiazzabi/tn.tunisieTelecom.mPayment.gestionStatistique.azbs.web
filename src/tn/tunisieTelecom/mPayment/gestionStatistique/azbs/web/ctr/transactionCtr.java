@@ -253,7 +253,12 @@ public class transactionCtr {
 						String etat = st.nextToken();
 						String id_trans = st.nextToken();
 						String tel_source = st.nextToken();
-						Date date_trans = formatter.parse(st.nextToken());
+						StringBuffer sb = new StringBuffer(st.nextToken());
+					    System.err.println(sb.toString());
+						sb.replace(8, 14, "0000000");
+					    System.err.println(sb.toString());
+						Date date_trans = formatter.parse(sb.toString());
+						System.err.println(date_trans);
 						Double montant = Double.parseDouble(st.nextToken());
 						montant = montant / 1000; 
 						String prod = st.nextToken().toUpperCase();
@@ -339,9 +344,12 @@ public class transactionCtr {
 					while ((ligne = br.readLine()) != null) {
 						String etat = ligne.substring(0, 1);
 						String id_trans = ligne.substring(1, 14);
-						Date date_trans = formatter.parse(ligne.substring(14,
-								28));
+						
+						StringBuffer sb = new StringBuffer(ligne.substring(14,28));
+						sb.replace(8, 14, "0000000");
+						Date date_trans = formatter.parse(sb.toString());
 						String tel = ligne.substring(43, 55);
+						
 						Double montant = Double.parseDouble(ligne.substring(55,
 								67));
 						montant = montant / 1000;
@@ -404,8 +412,9 @@ public class transactionCtr {
 					while ((ligne = br.readLine()) != null) {
 						String etat = ligne.substring(0, 1);
 						String id_trans = ligne.substring(1, 14);
-						Date date_trans = formatter.parse(ligne.substring(14,
-								28));
+						StringBuffer sb = new StringBuffer(ligne.substring(14,28));
+						sb.replace(8, 14, "0000000");
+						Date date_trans = formatter.parse(sb.toString());
 						String tel = ligne.substring(43, 55);
 						if (tel.charAt(4) == '9')
 							produit = produit_SMT_MOBILE;
