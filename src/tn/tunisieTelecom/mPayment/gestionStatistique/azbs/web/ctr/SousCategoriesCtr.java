@@ -20,26 +20,26 @@ public class SousCategoriesCtr {
 	private SousCategories sousCategorie = new SousCategories();
 	int idCat;
 	@EJB
-	SousCategotiesEJBLocal categotiesEJBLocal;
+	SousCategotiesEJBLocal sousCategotiesEJBLocal;
 
 	@EJB
 	CategoriesLocal categoriesLocal;
 
 	public List<SousCategories> findAll() {
-		return sousCategories = categotiesEJBLocal.findAll();
+		return sousCategories = sousCategotiesEJBLocal.findAll();
 	}
 
 	public void update() {
-		categotiesEJBLocal.update(selectedSousCategories);
+		sousCategotiesEJBLocal.update(selectedSousCategories);
 	}
 
 	public void delete() {
-		categotiesEJBLocal.remove(selectedSousCategories);
+		sousCategotiesEJBLocal.remove(selectedSousCategories);
 	}
 
 	public void add() {
 		sousCategorie.setCategories(categoriesLocal.findById(idCat));
-		categotiesEJBLocal.add(sousCategorie);
+		sousCategotiesEJBLocal.add(sousCategorie);
 		sousCategorie = new SousCategories();
 	}
 

@@ -43,8 +43,11 @@
 						<p:inputText
 							value="#{sousCategoriesCtr.selectedSousCategories.libelle}" />
 						<h:outputLabel value="Catégorie" />
-						<p:inputText readonly="true"
-							value="#{sousCategoriesCtr.selectedSousCategories.categories.libelle}"></p:inputText>
+					<p:selectOneMenu value="#{sousCategoriesCtr.selectedSousCategories.categories}">
+						<f:selectItems var="sous"
+							value="#{categoriesCtr.listCategories()}" itemValue="#{sous.id}"
+							itemLabel="#{sous.libelle}" />
+					</p:selectOneMenu>
 						<p:commandButton value="Modifier" update=":form:basicDT"
 							rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
 							onclick="if (! confirm('Really want to do that?')) return false"

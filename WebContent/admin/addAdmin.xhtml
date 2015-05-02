@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	<ui:define name="title"> espace admin | Users</ui:define>
+	<ui:define name="content">
+		<h1>Ajouter un administrateur</h1>
+		<h:form id="form">
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputText value="Nom" />
+				<p:inputText value="#{usersCtr.admin.nom}" />
+				<h:outputText value="Prenom" />
+				<p:inputText value="#{usersCtr.admin.prenom}" />
+				<h:outputLabel value="login" />
+				<p:inputText value="#{usersCtr.admin.login}" />
+				<h:outputText value="password" />
+				<p:password value="#{usersCtr.admin.password}" />
+				<h:outputText value="Departement" />
+				<p:selectOneMenu value="#{usersCtr.idDep}">
+					<f:selectItems var="dep" value="#{departementCtr.findAll()}"
+						itemValue="#{dep.id}" itemLabel="#{dep.nom}" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Ajouter" action="#{usersCtr.addAdmin()}"></p:commandButton>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

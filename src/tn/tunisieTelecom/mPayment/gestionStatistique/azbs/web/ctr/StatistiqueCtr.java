@@ -25,9 +25,13 @@ import org.primefaces.model.chart.PieChartModel;
 import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Banque;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Categories;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.SousCategories;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Statistique;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.BanqueEJBLocal;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.CategoriesLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.SousCategotiesEJBLocal;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.StatistiqueEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.TransactionEJBLocal;
 
 @ManagedBean
@@ -43,11 +47,15 @@ public class StatistiqueCtr {
 	private PieChartModel pieModelBanqueSousCatMontantpourcent = new PieChartModel();
 	private PieChartModel pieModelBanqueSousCatNombrepourcent = new PieChartModel();
 
+	private BarChartModel barModel = new BarChartModel();
+
 	private List<Banque> banques = new ArrayList<Banque>();
 	private Date start;
 	private Date end;
 	private int idBanque;
 	private List<SousCategories> sousCategories = new ArrayList<SousCategories>();
+	private List<Categories> categories = new ArrayList<Categories>();
+
 	private LineChartModel lineModel1 = new LineChartModel();
 	private String monthSelected;
 
@@ -59,6 +67,12 @@ public class StatistiqueCtr {
 
 	@EJB
 	SousCategotiesEJBLocal sousCategotiesEJBLocal;
+
+	@EJB
+	CategoriesLocal categoriesLocal;
+
+	@EJB
+	StatistiqueEJBLocal statistiqueEJBLocal;
 
 	private void createPieModelBanqueSousCat() {
 		pieModelBanqueSousCatMontant = new PieChartModel();
@@ -81,42 +95,49 @@ public class StatistiqueCtr {
 			System.err.println(object[0] + "  " + object[1]);
 			if (object[1] == null) {
 				pieModelBanqueSousCatMontant
-				.set(sousCategories.getLibelle(), 0);
-				pieModelBanqueSousCatMontantpourcent
-				.set(sousCategories.getLibelle(), 0);
+						.set(sousCategories.getLibelle(), 0);
+				pieModelBanqueSousCatMontantpourcent.set(
+						sousCategories.getLibelle(), 0);
 				pieModelBanqueSousCatNombre.set(sousCategories.getLibelle(), 0);
-				pieModelBanqueSousCatNombrepourcent.set(sousCategories.getLibelle(), 0);
+				pieModelBanqueSousCatNombrepourcent.set(
+						sousCategories.getLibelle(), 0);
 
 			} else {
 				pieModelBanqueSousCatMontant.set(sousCategories.getLibelle(),
 						Double.parseDouble("" + object[1]));
-				pieModelBanqueSousCatMontantpourcent.set(sousCategories.getLibelle(),
+				pieModelBanqueSousCatMontantpourcent.set(
+						sousCategories.getLibelle(),
 						Double.parseDouble("" + object[1]));
 				pieModelBanqueSousCatNombre.set(sousCategories.getLibelle(),
 						Double.parseDouble("" + object[0]));
-				pieModelBanqueSousCatNombrepourcent.set(sousCategories.getLibelle(),
+				pieModelBanqueSousCatNombrepourcent.set(
+						sousCategories.getLibelle(),
 						Double.parseDouble("" + object[0]));
 			}
 		}
-		pieModelBanqueSousCatMontant
-				.setTitle("Statistiques de la banque "+ banque.getNom() + " exprimés en montant");
+		pieModelBanqueSousCatMontant.setTitle("Statistiques de la banque "
+				+ banque.getNom() + " exprimés en montant");
 		pieModelBanqueSousCatMontant.setLegendPosition("w");
 
-		pieModelBanqueSousCatNombre
-				.setTitle("Statistiques de la banque "+ banque.getNom() + " en nombre de transactions");
+		pieModelBanqueSousCatNombre.setTitle("Statistiques de la banque "
+				+ banque.getNom() + " en nombre de transactions");
 		pieModelBanqueSousCatNombre.setLegendPosition("w");
-		
-		pieModelBanqueSousCatMontantpourcent.setTitle("Statistiques des Sous categories pour la banque "+ banque.getNom() + " en montant");
+
+		pieModelBanqueSousCatMontantpourcent
+				.setTitle("Statistiques des Sous categories pour la banque "
+						+ banque.getNom() + " en montant");
 		pieModelBanqueSousCatMontantpourcent.setLegendPosition("e");
 		pieModelBanqueSousCatMontantpourcent.setFill(false);
 		pieModelBanqueSousCatMontantpourcent.setShowDataLabels(true);
 		pieModelBanqueSousCatMontantpourcent.setDiameter(150);
-		pieModelBanqueSousCatNombrepourcent.setTitle("Statistiques des Sous categories pour la banque "+ banque.getNom() + " en nombre de transactions");
+		pieModelBanqueSousCatNombrepourcent
+				.setTitle("Statistiques des Sous categories pour la banque "
+						+ banque.getNom() + " en nombre de transactions");
 		pieModelBanqueSousCatNombrepourcent.setLegendPosition("e");
 		pieModelBanqueSousCatNombrepourcent.setFill(false);
 		pieModelBanqueSousCatNombrepourcent.setShowDataLabels(true);
 		pieModelBanqueSousCatNombrepourcent.setDiameter(150);
-		
+
 	}
 
 	private void createPieModel() {
@@ -161,9 +182,11 @@ public class StatistiqueCtr {
 		pieModel2.setFill(false);
 		pieModel2.setShowDataLabels(true);
 		pieModel2.setDiameter(150);
-		pieModel3.setTitle("Statistiques des banques exprimés en nombre de transactions");
+		pieModel3
+				.setTitle("Statistiques des banques exprimés en nombre de transactions");
 		pieModel3.setLegendPosition("w");
-		pieModel4.setTitle("Statistiques des banques exprimés en nombre de transactions");
+		pieModel4
+				.setTitle("Statistiques des banques exprimés en nombre de transactions");
 		pieModel4.setLegendPosition("e");
 		pieModel4.setFill(false);
 		pieModel4.setShowDataLabels(true);
@@ -182,6 +205,62 @@ public class StatistiqueCtr {
 	public void doStatistiqueMensuelle() {
 
 		createLineModels();
+
+	}
+
+	public void doStatistiquesParCategorie() {
+		barModel = createBarModel();
+		barModel.setTitle("Diagramme à bandes périodique par Catégorie");
+		barModel.setLegendPosition("ne");
+
+
+	}
+
+	private BarChartModel createBarModel() {
+		BarChartModel model = new BarChartModel();
+
+		categories = categoriesLocal.findAll();
+
+		Double montant = 0.0;
+		Double max = 0.0;
+
+		
+		
+		for (Categories categories : categories) {
+			ChartSeries serieCat = new ChartSeries();
+			serieCat.setLabel(categories.getLibelle());
+			System.err.println("------------------------------------");
+			System.err.println(categories.getLibelle());
+			List<Object[]> statistiques = statistiqueEJBLocal
+					.statistiquesCategories(start, end, categories.getId());
+
+			for (Object[] statistique : statistiques) {
+				System.err.println((Date) statistique[0] + "   "
+						+ (Double) statistique[1]);
+				
+				 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				 String dat = dateFormat.format((Date) statistique[0]);
+				serieCat.set( dat , (Double) statistique[1] );
+				
+				montant = (Double) statistique[1];
+				if (montant > max) {
+					max = montant;
+				}
+
+			}
+			model.addSeries(serieCat);
+
+		}
+		org.primefaces.model.chart.Axis xAxis = model.getAxis(AxisType.X);
+		xAxis.setLabel("Période");
+
+		org.primefaces.model.chart.Axis yAxis = model.getAxis(AxisType.Y);
+		yAxis.setLabel("Montant de l'activité");
+		yAxis.setMin(0);
+		yAxis.setMax(max + 500);
+		yAxis.setTickCount(7);
+
+		return model;
 
 	}
 
@@ -366,5 +445,12 @@ public class StatistiqueCtr {
 		this.pieModelBanqueSousCatNombrepourcent = pieModelBanqueSousCatNombrepourcent;
 	}
 
-	
+	public BarChartModel getBarModel() {
+		return barModel;
+	}
+
+	public void setBarModel(BarChartModel barModel) {
+		this.barModel = barModel;
+	}
+
 }

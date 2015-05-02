@@ -18,6 +18,10 @@ public class UserCtr {
 	private String login;
 	private String mdp;
 	private User user;
+	private String ancienMdp;
+	private String nouveauMdp;
+	private String confirmMdp;
+
 	@EJB
 	UserEJBLocal userEJBLocal;
 
@@ -37,21 +41,98 @@ public class UserCtr {
 					.getSession(false);
 
 			if (user instanceof Admin) {
-				session.setAttribute("username", login);
+				session.setAttribute("currentUser", user);
 				redirecTo = "/admin/index.jsf?faces-redirect=true";
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.addMessage(null, new FacesMessage("Successful",
+						"Your message: " + user.getLogin()));
+
 			} else if ((user instanceof Employees)) {
-				session.setAttribute("username", login);
+				session.setAttribute("currentUser", user);
 
 				redirecTo = "/employees/index.jsf?faces-redirect=true";
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.addMessage(null, new FacesMessage("Successful",
+						"Your message: " + user.getLogin()));
 
 			} else {
-				session.setAttribute("username", login);
+				session.setAttribute("currentUser", user);
 				redirecTo = "/employeesMpayement/index.jsf?faces-redirect=true";
 
 			}
 
 		}
+
 		return redirecTo;
+	}
+
+	public String doLogout() {
+		((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+
+		.getSession(true)).invalidate();
+		return "/index0.jsf?faces-redirect=true";
+	}
+
+	public void update_mdp() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		user = (User) session.getAttribute("currentUser");
+
+		if (user.getPassword().equals(ancienMdp)) {
+			if (nouveauMdp.equals(confirmMdp)) {
+				user.setPassword(nouveauMdp);
+				userEJBLocal.update(user);
+				ancienMdp = "";
+				nouveauMdp = "";
+				confirmMdp = "";
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage("Successful", "Mot de passe modifié avec succés"));
+				
+			}else{
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur ",
+								"Confirmation mot de passe incorrect."));
+				ancienMdp = "";
+				nouveauMdp = "";
+				confirmMdp = "";
+			}
+		} else {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur ",
+							"Ancien mot de passe incorrect."));
+			ancienMdp = "";
+			nouveauMdp = "";
+			confirmMdp = "";
+
+		}
+
+	}
+
+	public String getAncienMdp() {
+		return ancienMdp;
+	}
+
+	public void setAncienMdp(String ancienMdp) {
+		this.ancienMdp = ancienMdp;
+	}
+
+	public String getNouveauMdp() {
+		return nouveauMdp;
+	}
+
+	public void setNouveauMdp(String nouveauMdp) {
+		this.nouveauMdp = nouveauMdp;
+	}
+
+	public String getConfirmMdp() {
+		return confirmMdp;
+	}
+
+	public void setConfirmMdp(String confirmMdp) {
+		this.confirmMdp = confirmMdp;
 	}
 
 	public User getUser() {

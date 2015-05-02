@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	<ui:define name="title"> espace admin | Users</ui:define>
+	<ui:define name="content">
+		<h1>Gestion des utilisateurs</h1>
+		<h:form id="form">
+			<p:growl id="msgs" showDetail="true" />
+			<p:dataTable id="basicDT" var="user" value="#{usersCtr.findAll()}"
+				rows="6" rowKey="#{user.id}" paginatorPosition="bottom"
+				selectionMode="single" paginator="true"
+				selection="#{usersCtr.selectedUser}">
+				<p:ajax event="rowSelect" update=":details" />
+
+				<f:facet name="header">
+	          	Liste des utilisateurs
+	        </f:facet>
+				<p:column headerText="Id">
+					<h:outputText value="#{user.id}" />
+				</p:column>
+				<p:column headerText="Nom">
+					<h:outputText value="#{user.nom}" />
+				</p:column>
+				<p:column headerText="Prenom">
+					<h:outputText value="#{user.prenom}" />
+				</p:column>
+				<p:column headerText="Login">
+					<h:outputText value="#{user.login}" />
+				</p:column>
+				<p:column headerText="type User">
+					<h:outputText value="Admin"
+						rendered="#{user['class'].simpleName == 'Admin'}" />
+					<h:outputText value="Employee"
+						rendered="#{user['class'].simpleName == 'Employees'}" />
+				</p:column>
+				<p:column headerText="Departement">
+					<h:outputText value="#{user.departement.nom}" />
+				</p:column>
+
+			</p:dataTable>
+			<br />
+
+			<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+				<p:commandButton value="Ajouter un employé"
+					action="#{usersCtr.pageAddNewUser()}"></p:commandButton>
+				<p:commandButton value="Ajouter un employé Mpayement"
+					action="#{usersCtr.pageAddNewAdmin()}"></p:commandButton>
+				<p:commandButton value="Ajouter un administrateur"
+					action="#{usersCtr.pageAddNewAdmin()}"></p:commandButton>
+
+			</h:panelGrid>
+		</h:form>
+		<br />
+		<p:panel id="details">
+			<h3>Détails Utilisateur</h3>
+			<h:form id="update">
+
+				<h:panelGrid columns="2" style="margin-bottom:80px">
+					<h:outputLabel value="Nom" />
+					<p:inputText value="#{usersCtr.selectedUser.nom}" />
+					<h:outputLabel value="Prenom" />
+					<p:inputText value="#{usersCtr.selectedUser.prenom}" />
+					<h:outputLabel value="Login" />
+					<p:inputText value="#{usersCtr.selectedUser.login}" />
+					<h:outputLabel value="Password" />
+					<p:password value="#{usersCtr.selectedUser.password}" />
+					<h:outputLabel value="Departement" />
+					<p:selectOneMenu value="#{usersCtr.idDep}">
+						<f:selectItems var="dep" value="#{departementCtr.findAll()}"
+							itemValue="#{dep.id}" itemLabel="#{dep.nom}" />
+					</p:selectOneMenu>
+					<p:commandButton value="Modifier" update=":form:basicDT"
+						rendered="#{not empty produitCtr.selectedProduit}"
+						onclick="if (! confirm('Really want to do that?')) return false"
+						action="#{usersCtr.update()}"></p:commandButton>
+					<p:commandButton value="Supprimer" update=":form:basicDT"
+						rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
+						onclick="if (! confirm('Really want to do that?')) return false"
+						action="#{usersCtr.delete()}"></p:commandButton>
+				</h:panelGrid>
+
+
+			</h:form>
+		</p:panel>
+
+
+	</ui:define>
+</ui:composition>

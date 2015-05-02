@@ -3,8 +3,10 @@ package tn.tunisieTelecom.mPayment.gestionStatistique.azbs.web.filtre;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -60,12 +62,12 @@ public class UserAfterLogin implements Filter {
 			HttpSession ses = req.getSession(false);
 			String reqURI = req.getRequestURI();
 			if (reqURI.indexOf("/index0.jsf") >= 0
-					|| (ses != null && ses.getAttribute("username") != null)
+					|| (ses != null && ses.getAttribute("currentUser") != null)
 					|| reqURI.contains("javax.faces.resource"))
-				chain.doFilter(request, response);
-
-			else {
+			{	chain.doFilter(request, response);
+			}else {
 				res.sendRedirect(req.getContextPath() + "/index0.jsf");
+			
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());

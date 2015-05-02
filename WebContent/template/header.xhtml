@@ -2,31 +2,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
 <div id="header">
-		<div>
-			<div class="logo">
-				<a href="index.jsf"></a>
-			</div>
-			<ul id="navigation">
-				<li class="active">
-					<a href="index.jsf">Accueil</a>
-				</li>
-				<li>
-					<a href="transaction.jsf">Traitement Fichiers</a>
-				</li>
-				<li>
-					<a href="EtatIndex.jsf">Realiser des Etats</a>
-				</li>
-				<li>
-					<a href="StatistiqueIndex.jsf">Effectuer Statistiques</a>
-				</li>
-				<li id = "menu_deroul">
-					<a href="gestionBase.jsf">Gestion de la base</a>
-				</li>
-			</ul>
+	<div>
+		<div class="logo">
+			<a href="index.jsf"></a>
 		</div>
-	</div>	
-		
+		<ul id="navigation">
+			<li ><a href="index.jsf">Accueil</a></li>
+			<li><a href="transaction.jsf">Traitement Fichiers</a></li>
+			<li><a href="EtatIndex.jsf">Realiser des Etats</a></li>
+			<li><a href="StatistiqueIndex.jsf">Effectuer Statistiques</a></li>
+			<li id="menu_deroul"><a href="gestionBase.jsf">Gestion de la
+					base</a></li>
+		</ul>
+		<div STYLE="float: right;">
+			<br />
+			<h:form>
+				<p:commandLink id="nonAjax" action="#{userCtr.doLogout()}"
+					ajax="false">
+					<h:outputText value="Se déconnecter" />
+				</p:commandLink>
+<br />
+			<a href="personal.jsf" STYLE="float: right;"><img
+				src="../ressources/images/Personal.png" /> </a>
+ 
+			</h:form>
+		</div>
+	</div>
+</div>
+
 </html>

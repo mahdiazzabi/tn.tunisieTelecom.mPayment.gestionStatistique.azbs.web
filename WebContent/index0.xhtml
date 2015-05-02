@@ -9,14 +9,10 @@
 	<ui:define name="title"> authentification</ui:define>
 
 	<ui:define name="content">
-
+<h1>Authentification</h1>
 		<p:panel>
-
-			<br />
-			<h1>Authentification</h1>
 			<h:form>
 				<p:growl id="growl" showDetail="true"  />
-
 				<h:panelGrid columns="2" cellpadding="5">
 					<h:outputLabel value="Login" />
 					<p:inputText value="#{userCtr.login}" />
@@ -24,9 +20,8 @@
 					<p:password value="#{userCtr.mdp}" />
 				</h:panelGrid>
 				<br />
-				<h:panelGrid columns="2" cellpadding="5">
-					<p:commandButton action="#{userCtr.doLogin()}" value="Valider"  update="growl"></p:commandButton>
-					<p:commandButton value="Annuler"></p:commandButton>
+				<h:panelGrid columns="2" >
+					<p:commandButton action="#{userCtr.doLogin()}" value="Se connecter"  update="growl"></p:commandButton>
 				</h:panelGrid>
 				<br />
 				<br />

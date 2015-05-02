@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	<ui:define name="title"> espace admin | Departement</ui:define>
+
+	<ui:define name="content">
+		<h1>Departement</h1>
+		<h:form id="form">
+			<p:growl id="msgs" showDetail="true" />
+			<p:dataTable id="basicDT" var="dep"
+				value="#{departementCtr.findAll()}" rows="6"
+				rowKey="#{dep.id}" paginatorPosition="bottom" selectionMode="single"
+				paginator="true" selection="#{departementCtr.selectedDepartement}">
+				<p:ajax event="rowSelect" update=":details" />
+				<f:facet name="header">
+	          	List Departements
+	        </f:facet>
+				<p:column headerText="Id">
+					<h:outputText value="#{dep.id}" />
+				</p:column>
+				<p:column headerText="Nom du departement">
+					<h:outputText value="#{dep.nom}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		<br />
+		<br />
+
+		<p:panel id="details">
+
+			<div>
+				<center>
+					<h2>Details</h2>
+				</center>
+				<h:panelGrid columns="2">
+					<h:form>
+						<h:panelGrid columns="2" style="margin-right:80px">
+							<h:outputLabel value="Id" />
+							<p:inputText value="#{departementCtr.selectedDepartement.id}"
+								readonly="true" />
+							<h:outputLabel value="nom du departement" />
+							<p:inputText value="#{departementCtr.selectedDepartement.nom}" />
+							<p:commandButton value="Update" update=":form:basicDT"
+								rendered="#{not empty departementCtr.selectedDepartement}"
+								onclick="if (! confirm('Really want to do that?')) return false"
+								action="#{departementCtr.update()}"></p:commandButton>
+							<p:commandButton value="Delete" update=":form:basicDT"
+								rendered="#{not empty departementCtr.selectedDepartement}"
+								onclick="if (! confirm('Really want to do that?')) return false"
+								action="#{departementCtr.delete()}"></p:commandButton>
+						</h:panelGrid>
+					</h:form>
+					<h:form>
+						<h:panelGrid columns="2">
+							<h:outputLabel value="nom du departement" />
+							<p:inputText value="#{departementCtr.departement.nom}" />
+							<p:commandButton value="Add" update=":form:basicDT"
+								action="#{departementCtr.add()}"></p:commandButton>
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</div>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>

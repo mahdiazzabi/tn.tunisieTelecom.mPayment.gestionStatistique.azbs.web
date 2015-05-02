@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	<ui:define name="title"> espace admin | utilisateur</ui:define>
+	<ui:define name="content">
+
+
+		<h1>Modification de mot de passe</h1>
+
+
+		<p:panel>
+			<h:panelGrid coluns="2">
+				<h:form id="update">
+					<p:growl id="growl" showDetail="true" sticky="true" />
+					<h:panelGrid columns="2" style="margin-right:80px">
+						<h:outputLabel value="Ancien Mot de passe " />
+						<p:password value="#{userCtr.ancienMdp}" required="true" />
+						<h:outputLabel value="Nouveau Mot de passe" />
+						<p:password value="#{userCtr.nouveauMdp}" required="true" />
+						<h:outputLabel value="Confirmation Mot de passe" />
+						<p:password value="#{userCtr.confirmMdp}" required="true" />
+
+
+					</h:panelGrid>
+<br />
+					<p:commandButton value="Modifier mon mot de passe" action="#{userCtr.update_mdp()}"
+						update="growl">
+						<f:ajax render=":update" />
+					</p:commandButton>
+
+				</h:form>
+			</h:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

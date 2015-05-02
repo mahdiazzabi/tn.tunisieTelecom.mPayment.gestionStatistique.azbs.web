@@ -15,8 +15,10 @@ import java.util.StringTokenizer;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Null;
 
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Banque;
@@ -41,6 +43,7 @@ public class transactionCtr {
 	Banque banque;
 	Fichier fichier;
 	User user = new User(); // a definir
+
 	@EJB
 	TransactionEJBLocal transactionEJBLocal;
 
@@ -60,7 +63,10 @@ public class transactionCtr {
 			throws IOException {
 		produits = produitEJBLocal.findall();
 		banque = banqueEJBLocal.findById(idBanque);
-
+		HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		user = (User) session.getAttribute("currentUser");
 		try {
 			switch (idBanque) {
 			case 1:
@@ -152,8 +158,6 @@ public class transactionCtr {
 			fichier.setEtat_traitement("ECHEC");
 
 			fichier.setDate_fichier(date_fichier);
-
-			user = userEJBLocal.doLogin("admin", "admin");
 			fichier.setUser(user);
 			fichierEJBLocal.add(fichier);
 			fichier = fichierEJBLocal.findByNom(fichier.getNom());
@@ -225,7 +229,7 @@ public class transactionCtr {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 		fichier = fichierEJBLocal.findByNom(fileName);
 		if (fichier == null) {
-		
+
 			fichier = new Fichier();
 			fichier.setBanque(banque);
 			fichier.setNom(fileName);
@@ -236,8 +240,6 @@ public class transactionCtr {
 			fichier.setEtat_traitement("ECHEC");
 
 			fichier.setDate_fichier(date_fichier);
-
-			user = userEJBLocal.doLogin("admin", "admin");
 			fichier.setUser(user);
 			fichierEJBLocal.add(fichier);
 			fichier = fichierEJBLocal.findByNom(fichier.getNom());
@@ -254,13 +256,13 @@ public class transactionCtr {
 						String id_trans = st.nextToken();
 						String tel_source = st.nextToken();
 						StringBuffer sb = new StringBuffer(st.nextToken());
-					    System.err.println(sb.toString());
+						System.err.println(sb.toString());
 						sb.replace(8, 14, "0000000");
-					    System.err.println(sb.toString());
+						System.err.println(sb.toString());
 						Date date_trans = formatter.parse(sb.toString());
 						System.err.println(date_trans);
 						Double montant = Double.parseDouble(st.nextToken());
-						montant = montant / 1000; 
+						montant = montant / 1000;
 						String prod = st.nextToken().toUpperCase();
 
 						tr = new Transaction();
@@ -268,7 +270,7 @@ public class transactionCtr {
 							if (produit.getRef() == Integer.parseInt(prod
 									.trim())) {
 								tr.setProduit(produit);
-								}
+							}
 						}
 						tr.setFichier(fichier);
 						tr.setEtat(etat);
@@ -321,7 +323,6 @@ public class transactionCtr {
 			fichier.setDate_traitement(calendar.getTime());
 			fichier.setEtat_traitement("ECHEC");
 			fichier.setDate_fichier(date_fichier);
-			user = userEJBLocal.doLogin("admin", "admin");
 			fichier.setUser(user);
 			fichierEJBLocal.add(fichier);
 			fichier = fichierEJBLocal.findByNom(fichier.getNom());
@@ -344,12 +345,13 @@ public class transactionCtr {
 					while ((ligne = br.readLine()) != null) {
 						String etat = ligne.substring(0, 1);
 						String id_trans = ligne.substring(1, 14);
-						
-						StringBuffer sb = new StringBuffer(ligne.substring(14,28));
+
+						StringBuffer sb = new StringBuffer(ligne.substring(14,
+								28));
 						sb.replace(8, 14, "0000000");
 						Date date_trans = formatter.parse(sb.toString());
 						String tel = ligne.substring(43, 55);
-						
+
 						Double montant = Double.parseDouble(ligne.substring(55,
 								67));
 						montant = montant / 1000;
@@ -412,7 +414,8 @@ public class transactionCtr {
 					while ((ligne = br.readLine()) != null) {
 						String etat = ligne.substring(0, 1);
 						String id_trans = ligne.substring(1, 14);
-						StringBuffer sb = new StringBuffer(ligne.substring(14,28));
+						StringBuffer sb = new StringBuffer(ligne.substring(14,
+								28));
 						sb.replace(8, 14, "0000000");
 						Date date_trans = formatter.parse(sb.toString());
 						String tel = ligne.substring(43, 55);
@@ -481,5 +484,5 @@ public class transactionCtr {
 		this.user = user;
 	}
 
-	
+
 }
