@@ -6,29 +6,24 @@
 	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
 	<ui:define name="title"> espace admin | Users</ui:define>
 	<ui:define name="content">
-		<h1>Ajouter un administrateur</h1>
-		<h:form id = "Champ" >
-
+		<h1>Ajouter un employé Mpayement</h1>
+		<h:form id="Champ">
 			<h:panelGrid id="grid" columns="3" cellpadding="5">
-
 				<h:outputText for="Nom" value="Nom" />
-				<p:inputText id="Nom" value="#{usersCtr.admin.nom}" required="true" />
+				<p:inputText id="Nom" value="#{usersCtr.employeesMpayement.nom}" required="true"/>
 				<p:message for="Nom" />
 
 				<h:outputText for="Prenom" value="Prenom" />
-				<p:inputText id="Prenom" value="#{usersCtr.admin.prenom}"
-					required="true" />
+				<p:inputText id="Prenom" value="#{usersCtr.employeesMpayement.prenom}" required="true" />
 				<p:message for="Prenom" />
 
-				<h:outputLabel for="Login" value="login" />
-				<p:inputText id="Login" value="#{usersCtr.admin.login}"
-					required="true" />
-				<p:message for="Login" />
+				<h:outputLabel for="login" value="login" />
+				<p:inputText id="login" value="#{usersCtr.employeesMpayement.login}" required="true" />
+				<p:message for="login" />
 
 				<h:outputText for="Password" value="Password" />
-				<p:password id="password" value="#{usersCtr.admin.password}"
-					required="true" />
-				<p:message for="password" />
+				<p:password id="Password" value="#{usersCtr.employeesMpayement.password}" required="true"  />
+				<p:message for="Password" />
 
 				<h:outputText value="Departement" />
 				<p:selectOneMenu value="#{usersCtr.idDep}">
@@ -36,8 +31,7 @@
 						itemValue="#{dep.id}" itemLabel="#{dep.nom}" />
 				</p:selectOneMenu>
 				<br />
-				<p:commandButton value="Ajouter" action="#{usersCtr.addAdmin()}"
-					update="grid"></p:commandButton>
+				<p:commandButton value="Ajouter" action="#{usersCtr.addemployeMP()}" update="grid"></p:commandButton>
 			</h:panelGrid>
 		</h:form>
 	</ui:define>

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Produit;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.SousCategories;
@@ -42,8 +44,11 @@ public class ProduitCtr {
 		produit.setSousCategories(sousCategotiesEJBLocal.findById(idSousCat));
 		for (Produit produit : produits) {
 			if (produit.getRef() == this.produit.getRef()) {
-				System.err.println("duplicate Ref for produit");
-
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN,
+								"Attention : ", "Reférence existante"));
+		
 				return;
 			}
 		}

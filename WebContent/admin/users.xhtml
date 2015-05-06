@@ -10,7 +10,7 @@
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="basicDT" var="user" value="#{usersCtr.findAll()}"
-				rows="6" rowKey="#{user.id}" paginatorPosition="bottom"
+				rows="9" rowKey="#{user.id}" paginatorPosition="bottom"
 				selectionMode="single" paginator="true"
 				selection="#{usersCtr.selectedUser}">
 				<p:ajax event="rowSelect" update=":details" />
@@ -33,11 +33,16 @@
 				<p:column headerText="type User">
 					<h:outputText value="Admin"
 						rendered="#{user['class'].simpleName == 'Admin'}" />
-					<h:outputText value="Employee"
+					<h:outputText value="Employe"
 						rendered="#{user['class'].simpleName == 'Employees'}" />
+					<h:outputText value="Employe Mp"
+						rendered="#{user['class'].simpleName == 'EmployeesMpayement'}" />
 				</p:column>
 				<p:column headerText="Departement">
 					<h:outputText value="#{user.departement.nom}" />
+				</p:column>
+				<p:column headerText="password" rendered="false">
+					<h:outputText value="#{user.password}" />
 				</p:column>
 
 			</p:dataTable>
@@ -47,7 +52,7 @@
 				<p:commandButton value="Ajouter un employé"
 					action="#{usersCtr.pageAddNewUser()}"></p:commandButton>
 				<p:commandButton value="Ajouter un employé Mpayement"
-					action="#{usersCtr.pageAddNewAdmin()}"></p:commandButton>
+					action="#{usersCtr.pageAddNewEmplyeesMP}"></p:commandButton>
 				<p:commandButton value="Ajouter un administrateur"
 					action="#{usersCtr.pageAddNewAdmin()}"></p:commandButton>
 
@@ -56,30 +61,48 @@
 		<br />
 		<p:panel id="details">
 			<h3>Détails Utilisateur</h3>
-			<h:form id="update">
+			<h:form id="Champ">
 
-				<h:panelGrid columns="2" style="margin-bottom:80px">
-					<h:outputLabel value="Nom" />
-					<p:inputText value="#{usersCtr.selectedUser.nom}" />
-					<h:outputLabel value="Prenom" />
-					<p:inputText value="#{usersCtr.selectedUser.prenom}" />
-					<h:outputLabel value="Login" />
-					<p:inputText value="#{usersCtr.selectedUser.login}" />
+				<h:panelGrid id="grid" columns="3" cellspacing="10">
+
+					<h:outputLabel for="Nom" value="Nom" />
+					<p:inputText id="Nom" value="#{usersCtr.selectedUser.nom}"
+						required="true" />
+					<p:message for="Nom" />
+
+					<h:outputLabel for="Prenom" value="Prenom" />
+					<p:inputText id="Prenom" value="#{usersCtr.selectedUser.prenom}"
+						required="true" />
+					<p:message for="Prenom" />
+
+					<h:outputLabel for="Login" value="Login" />
+					<p:inputText id="Login" value="#{usersCtr.selectedUser.login}"
+						required="true" />
+					<p:message for="Login" />
+
 					<h:outputLabel value="Password" />
-					<p:password value="#{usersCtr.selectedUser.password}" />
+					<p:password id="Password" value="#{usersCtr.selectedUser.password}"
+						required="true" />
+					<p:message for="Password" />
+
 					<h:outputLabel value="Departement" />
-					<p:selectOneMenu value="#{usersCtr.idDep}">
+					<p:selectOneMenu value="#{usersCtr.selectedUser.departement.id}">
 						<f:selectItems var="dep" value="#{departementCtr.findAll()}"
 							itemValue="#{dep.id}" itemLabel="#{dep.nom}" />
 					</p:selectOneMenu>
-					<p:commandButton value="Modifier" update=":form:basicDT"
+					<br />
+					<p:commandButton value="Modifier" update="grid"
 						rendered="#{not empty produitCtr.selectedProduit}"
 						onclick="if (! confirm('Really want to do that?')) return false"
 						action="#{usersCtr.update()}"></p:commandButton>
-					<p:commandButton value="Supprimer" update=":form:basicDT"
+
+					<p:commandButton value="Supprimer" update="grid"
 						rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
 						onclick="if (! confirm('Really want to do that?')) return false"
 						action="#{usersCtr.delete()}"></p:commandButton>
+
+
+
 				</h:panelGrid>
 
 

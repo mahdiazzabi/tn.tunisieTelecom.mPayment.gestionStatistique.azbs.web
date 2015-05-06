@@ -7,7 +7,7 @@
 	<ui:define name="title"> espace admin | Departement</ui:define>
 
 	<ui:define name="content">
-		<h1>Departement</h1>
+		<h1>Gestion des departements</h1>
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="basicDT" var="dep"
@@ -16,7 +16,7 @@
 				paginator="true" selection="#{departementCtr.selectedDepartement}">
 				<p:ajax event="rowSelect" update=":details" />
 				<f:facet name="header">
-	          	List Departements
+	          	Liste des departements
 	        </f:facet>
 				<p:column headerText="Id">
 					<h:outputText value="#{dep.id}" />

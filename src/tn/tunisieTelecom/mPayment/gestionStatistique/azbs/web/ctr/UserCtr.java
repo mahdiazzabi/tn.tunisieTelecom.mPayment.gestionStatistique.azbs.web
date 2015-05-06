@@ -57,7 +57,7 @@ public class UserCtr {
 
 			} else {
 				session.setAttribute("currentUser", user);
-				redirecTo = "/employeesMpayement/index.jsf?faces-redirect=true";
+				redirecTo = "/employeesMpayement/transaction.jsf?faces-redirect=true";
 
 			}
 

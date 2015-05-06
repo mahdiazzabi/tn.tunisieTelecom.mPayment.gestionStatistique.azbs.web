@@ -24,11 +24,15 @@ import javax.validation.constraints.Null;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Banque;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Fichier;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Produit;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.SousCategories;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Statistique;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Transaction;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.User;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.BanqueEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.FichierEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.ProduitEJBLocal;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.SousCategotiesEJBLocal;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.StatistiqueEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.TransactionEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.UserEJBLocal;
 
@@ -59,13 +63,18 @@ public class transactionCtr {
 	@EJB
 	UserEJBLocal userEJBLocal;
 
+	@EJB
+	SousCategotiesEJBLocal sousCategotiesEJBLocal;
+
+	@EJB
+	StatistiqueEJBLocal statistiqueEJBLocal;
+
 	public void traiterFichier(InputStream in, String fileName)
 			throws IOException {
 		produits = produitEJBLocal.findall();
 		banque = banqueEJBLocal.findById(idBanque);
-		HttpSession session = (HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext()
-				.getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
 		user = (User) session.getAttribute("currentUser");
 		try {
 			switch (idBanque) {
@@ -73,7 +82,6 @@ public class transactionCtr {
 			case 2:
 			case 3: {
 				String tab[] = fileName.split("_");
-
 				if (tab[0].trim().equals(banque.getNom().toUpperCase()) == false)
 					FacesContext.getCurrentInstance().addMessage(
 							null,
@@ -82,29 +90,24 @@ public class transactionCtr {
 									"Le fichier selectionné ne correspond pas a la banque "
 											+ banque.getNom()));
 				else {
-
 					SimpleDateFormat formatter1 = new SimpleDateFormat(
 							"ddMMyyyy");
 					Date date_fichier = formatter1
 							.parse(tab[1].substring(0, 8));
 					traitement_Fichier_STB_BH_BNA(in, fileName, date_fichier);
-
 				}
 			}
 				;
 				break;
 			case 4: {
 				String tab[] = fileName.split("_");
-
 				if (tab[0].trim().equals(banque.getNom().toUpperCase()) == false)
-
 					FacesContext.getCurrentInstance().addMessage(
 							null,
 							new FacesMessage(FacesMessage.SEVERITY_WARN,
 									"Attention : ",
 									"Le fichier selectionné ne correspond pas a la banque "
 											+ banque.getNom()));
-
 				else {
 					SimpleDateFormat formatter1 = new SimpleDateFormat(
 							"ddMMyyyy");
@@ -133,7 +136,6 @@ public class transactionCtr {
 			default:
 				;
 			}
-
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -145,22 +147,27 @@ public class transactionCtr {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-y");
 		fichier = fichierEJBLocal.findByNom(fileName);
 		if (fichier == null) {
-			// creer nouveau fichier
-			System.err
-					.println("----------------CREATION NEW FICHIER----------------");
 			fichier = new Fichier();
 			fichier.setBanque(banque);
 			fichier.setNom(fileName);
-
 			Calendar calendar = Calendar.getInstance();
 			fichier.setDate_traitement(calendar.getTime());
-
 			fichier.setEtat_traitement("ECHEC");
-
 			fichier.setDate_fichier(date_fichier);
 			fichier.setUser(user);
 			fichierEJBLocal.add(fichier);
 			fichier = fichierEJBLocal.findByNom(fichier.getNom());
+			List<SousCategories> sousCategories = sousCategotiesEJBLocal
+					.findAll();
+			for (SousCategories sousCategories2 : sousCategories) {
+				Statistique statistique = new Statistique();
+				statistique.setSousCategories(sousCategories2);
+				statistique.setMontantTransactions(0);
+				statistique.setNbrTransactions(0);
+				statistique.setBanque(banque);
+				statistique.setJournee(date_fichier);
+				statistiqueEJBLocal.add(statistique);
+			}
 			try {
 				InputStream ips = in;
 				InputStreamReader ipsr = new InputStreamReader(ips);
@@ -178,8 +185,8 @@ public class transactionCtr {
 						st.nextToken();
 						st.nextToken();
 						String prod = st.nextToken().toUpperCase();
-
 						tr = new Transaction();
+						tr.setProduit(null);
 						for (Produit produit : produits) {
 							if (produit.getLibelle().equals(prod.trim())) {
 								tr.setProduit(produit);
@@ -194,32 +201,62 @@ public class transactionCtr {
 						transactions.add(tr);
 					}
 				}
+				Boolean prod_OK = true;
+				for (Transaction transaction : transactions) {
+					if (transaction.getProduit() == null) {
+						prod_OK = false;
 
-				if (transactionEJBLocal.addListe(transactions)) {
-					fichier.setEtat_traitement("TRAITE");
-					fichierEJBLocal.update(fichier);
+					}
+				}
+				if (prod_OK) {
+					if (transactionEJBLocal.addListe(transactions)) {
+						fichier.setEtat_traitement("TRAITE");
+						fichierEJBLocal.update(fichier);
+					} else {
+					}
+					br.close();
+					FacesContext.getCurrentInstance().addMessage(
+							null,
+							new FacesMessage("Successful", "Le fichier "
+									+ fichier.getNom()
+									+ " est traité avec succés."));
+
+				} else {
+					fichierEJBLocal.remove(fichier);
+					List<Statistique> statistiques = statistiqueEJBLocal
+							.findByIdBanqueJour(date_fichier, banque.getId());
+					for (Statistique statistique : statistiques) {
+						statistiqueEJBLocal.delete(statistique);
+					}
+					FacesContext
+							.getCurrentInstance()
+							.addMessage(
+									null,
+									new FacesMessage(
+											FacesMessage.SEVERITY_ERROR,
+											"Produit introuvable : ",
+											"Une des transactions contient un produit non valide.Veuillez verifier"));
 
 				}
-				br.close();
-
-				FacesContext.getCurrentInstance()
-						.addMessage(
-								null,
-								new FacesMessage("Successful", "Le fichier "
-										+ fichier.getNom()
-										+ " est traité avec succés."));
-
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				fichierEJBLocal.remove(fichier);
+				List<Statistique> statistiques = statistiqueEJBLocal
+						.findByIdBanqueJour(date_fichier, banque.getId());
+				for (Statistique statistique : statistiques) {
+					statistiqueEJBLocal.delete(statistique);
+				}
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Format erroné : ", "Le contenu du fichier  "
+										+ fichier.getNom() + " est erroné."));
 			}
-
 		} else {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
 							"Déjà traité : ", "Le fichier " + fichier.getNom()
 									+ " est déjà traité."));
-
 		}
 	}
 
@@ -229,21 +266,27 @@ public class transactionCtr {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 		fichier = fichierEJBLocal.findByNom(fileName);
 		if (fichier == null) {
-
 			fichier = new Fichier();
 			fichier.setBanque(banque);
 			fichier.setNom(fileName);
-
 			Calendar calendar = Calendar.getInstance();
 			fichier.setDate_traitement(calendar.getTime());
-
 			fichier.setEtat_traitement("ECHEC");
-
 			fichier.setDate_fichier(date_fichier);
 			fichier.setUser(user);
 			fichierEJBLocal.add(fichier);
 			fichier = fichierEJBLocal.findByNom(fichier.getNom());
-
+			List<SousCategories> sousCategories = sousCategotiesEJBLocal
+					.findAll();
+			for (SousCategories sousCategories2 : sousCategories) {
+				Statistique statistique = new Statistique();
+				statistique.setSousCategories(sousCategories2);
+				statistique.setMontantTransactions(0);
+				statistique.setNbrTransactions(0);
+				statistique.setBanque(banque);
+				statistique.setJournee(date_fichier);
+				statistiqueEJBLocal.add(statistique);
+			}
 			try {
 				InputStream ips = in;
 				InputStreamReader ipsr = new InputStreamReader(ips);
@@ -264,8 +307,8 @@ public class transactionCtr {
 						Double montant = Double.parseDouble(st.nextToken());
 						montant = montant / 1000;
 						String prod = st.nextToken().toUpperCase();
-
 						tr = new Transaction();
+						tr.setProduit(null);
 						for (Produit produit : produits) {
 							if (produit.getRef() == Integer.parseInt(prod
 									.trim())) {
@@ -280,24 +323,70 @@ public class transactionCtr {
 						tr.setTel_source(tel_source);
 						transactions.add(tr);
 					}
-
 				}
-				if (transactionEJBLocal.addListe(transactions)) {
-					fichier.setEtat_traitement("TRAITE");
-					fichierEJBLocal.update(fichier);
-
+				Boolean prod_OK = true;
+				for (Transaction transaction : transactions) {
+					if (transaction.getProduit() == null) {
+						prod_OK = false;
+					}
 				}
-				br.close();
-
-				FacesContext.getCurrentInstance()
-						.addMessage(
+				if (prod_OK) {
+					if (transactionEJBLocal.addListe(transactions)) {
+						fichier.setEtat_traitement("TRAITE");
+						fichierEJBLocal.update(fichier);
+						br.close();
+						FacesContext.getCurrentInstance().addMessage(
 								null,
 								new FacesMessage("Successful", "Le fichier "
 										+ fichier.getNom()
 										+ " est traité avec succés."));
+					} else {
 
+						fichierEJBLocal.remove(fichier);
+						List<Statistique> statistiques = statistiqueEJBLocal
+								.findByIdBanqueJour(date_fichier,
+										banque.getId());
+						for (Statistique statistique : statistiques) {
+							statistiqueEJBLocal.delete(statistique);
+						}
+						FacesContext.getCurrentInstance().addMessage(
+								null,
+								new FacesMessage(FacesMessage.SEVERITY_ERROR,
+										"Format erroné : ",
+										"Le contenu du fichier  "
+												+ fichier.getNom()
+												+ " est erroné."));
+
+					}
+				} else {
+					fichierEJBLocal.remove(fichier);
+					List<Statistique> statistiques = statistiqueEJBLocal
+							.findByIdBanqueJour(date_fichier, banque.getId());
+					for (Statistique statistique : statistiques) {
+						statistiqueEJBLocal.delete(statistique);
+					}
+					FacesContext
+							.getCurrentInstance()
+							.addMessage(
+									null,
+									new FacesMessage(
+											FacesMessage.SEVERITY_ERROR,
+											"Produit introuvable : ",
+											"Une des transactions contient un produit non valide.Veuillez verifier"));
+
+				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				fichierEJBLocal.remove(fichier);
+				List<Statistique> statistiques = statistiqueEJBLocal
+						.findByIdBanqueJour(date_fichier, banque.getId());
+				for (Statistique statistique : statistiques) {
+					statistiqueEJBLocal.delete(statistique);
+				}
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Format erroné : ", "Le contenu du fichier  "
+										+ fichier.getNom() + " est erroné."));
 			}
 		} else {
 			FacesContext.getCurrentInstance().addMessage(
@@ -305,7 +394,6 @@ public class transactionCtr {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
 							"Déjà traité : ", "Le fichier " + fichier.getNom()
 									+ " est déjà traité."));
-
 		}
 	}
 
@@ -326,16 +414,24 @@ public class transactionCtr {
 			fichier.setUser(user);
 			fichierEJBLocal.add(fichier);
 			fichier = fichierEJBLocal.findByNom(fichier.getNom());
-
+			List<SousCategories> sousCategories = sousCategotiesEJBLocal
+					.findAll();
+			for (SousCategories sousCategories2 : sousCategories) {
+				Statistique statistique = new Statistique();
+				statistique.setSousCategories(sousCategories2);
+				statistique.setMontantTransactions(0);
+				statistique.setNbrTransactions(0);
+				statistique.setBanque(banque);
+				statistique.setJournee(date_fichier);
+				statistiqueEJBLocal.add(statistique);
+			}
 			if (fileName.toUpperCase().contains("FACT")) {
 				for (Produit produit : produits) {
 					if (produit.getLibelle().toUpperCase()
 							.equals("TTBilling_SMT".toUpperCase())) {
 						produit_SMT_Facture = produit;
 					}
-
 				}
-
 				try {
 					InputStream ips = in;
 					InputStreamReader ipsr = new InputStreamReader(ips);
@@ -345,17 +441,14 @@ public class transactionCtr {
 					while ((ligne = br.readLine()) != null) {
 						String etat = ligne.substring(0, 1);
 						String id_trans = ligne.substring(1, 14);
-
 						StringBuffer sb = new StringBuffer(ligne.substring(14,
 								28));
 						sb.replace(8, 14, "0000000");
 						Date date_trans = formatter.parse(sb.toString());
 						String tel = ligne.substring(43, 55);
-
 						Double montant = Double.parseDouble(ligne.substring(55,
 								67));
 						montant = montant / 1000;
-
 						tr = new Transaction();
 						tr.setFichier(fichier);
 						tr.setEtat(etat);
@@ -369,22 +462,31 @@ public class transactionCtr {
 					if (transactionEJBLocal.addListe(transactions)) {
 						fichier.setEtat_traitement("TRAITE");
 						fichierEJBLocal.update(fichier);
-
 					}
 					br.close();
-
 					FacesContext.getCurrentInstance().addMessage(
 							null,
 							new FacesMessage("Successful", "Le fichier "
 									+ fichier.getNom()
 									+ " est traité avec succés."));
-
 				} catch (Exception e) {
-
-					System.out.println(e.getMessage());
+					fichierEJBLocal.remove(fichier);
+					List<Statistique> statistiques = statistiqueEJBLocal
+							.findByIdBanqueJour(date_fichier, banque.getId());
+					for (Statistique statistique : statistiques) {
+						statistiqueEJBLocal.delete(statistique);
+					}
+					FacesContext.getCurrentInstance()
+							.addMessage(
+									null,
+									new FacesMessage(
+											FacesMessage.SEVERITY_ERROR,
+											"Format erroné : ",
+											"Le contenu du fichier  "
+													+ fichier.getNom()
+													+ " est erroné."));
 				}
 			} else {
-
 				Produit produit_SMT_MOBILE = new Produit();
 				Produit produit_SMT_ELISSA = new Produit();
 				Produit produit_SMT_FIXE = new Produit();
@@ -395,21 +497,17 @@ public class transactionCtr {
 					} else if (produit.getLibelle().toUpperCase()
 							.equals("SMT_ELISSA".toUpperCase())) {
 						produit_SMT_ELISSA = produit;
-
 					} else if (produit.getLibelle().toUpperCase()
 							.equals("SMT_FIXE".toUpperCase())) {
 						produit_SMT_FIXE = produit;
 					}
-
 				}
-
 				Produit produit = new Produit();
 				try {
 					InputStream ips = in;
 					InputStreamReader ipsr = new InputStreamReader(ips);
 					BufferedReader br = new BufferedReader(ipsr);
 					String ligne;
-
 					br.readLine();
 					while ((ligne = br.readLine()) != null) {
 						String etat = ligne.substring(0, 1);
@@ -441,21 +539,30 @@ public class transactionCtr {
 					if (transactionEJBLocal.addListe(transactions)) {
 						fichier.setEtat_traitement("TRAITE");
 						fichierEJBLocal.update(fichier);
-
 					}
 					br.close();
-
 					FacesContext.getCurrentInstance().addMessage(
 							null,
 							new FacesMessage("Successful", "Le fichier "
 									+ fichier.getNom()
 									+ " est traité avec succés."));
-
 				} catch (Exception e) {
-
-					System.out.println(e.getMessage());
+					fichierEJBLocal.remove(fichier);
+					List<Statistique> statistiques = statistiqueEJBLocal
+							.findByIdBanqueJour(date_fichier, banque.getId());
+					for (Statistique statistique : statistiques) {
+						statistiqueEJBLocal.delete(statistique);
+					}
+					FacesContext.getCurrentInstance()
+							.addMessage(
+									null,
+									new FacesMessage(
+											FacesMessage.SEVERITY_ERROR,
+											"Format erroné : ",
+											"Le contenu du fichier  "
+													+ fichier.getNom()
+													+ " est erroné."));
 				}
-
 			}
 
 		} else {
@@ -465,7 +572,6 @@ public class transactionCtr {
 							"Déjà traité : ", "Le fichier " + fichier.getNom()
 									+ " est déjà traité."));
 		}
-
 	}
 
 	public int getIdBanque() {
@@ -483,6 +589,4 @@ public class transactionCtr {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-
 }

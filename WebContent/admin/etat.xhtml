@@ -84,8 +84,6 @@
 
 			<br />
 
-			<br />
-
 			<p:dataTable id="sousCatDT"
 				value="#{etatCategoriesCtr.etatSousCategories}" var="l" rows="10"
 				rowKey="#{l.libelle}">
@@ -116,17 +114,11 @@
 
 			<br />
 
-			<br />
-
-			<h:panelGrid columns="2">
-
+			<h:panelGrid columns="1">
+				<h2>Exporter</h2>
 				<h:commandLink>
 					<p:graphicImage value="/ressources/images/pdf-2.png" />
-					<p:dataExporter type="pdf" target="sousCatDT" fileName="Etat" />
-				</h:commandLink>
-				<h:commandLink>
-					<p:graphicImage value="/ressources/images/Excel.png" />
-					<p:dataExporter type="xls" target="tbl" fileName="Etat"  />
+					<p:dataExporter type="pdf" target="sousCatDT" fileName="Etat global du 06-04-2014" />
 				</h:commandLink>
 
 			</h:panelGrid>

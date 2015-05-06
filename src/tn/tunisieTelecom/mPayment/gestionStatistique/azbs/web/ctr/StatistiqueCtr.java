@@ -174,19 +174,19 @@ public class StatistiqueCtr {
 			}
 		}
 
-		pieModel1.setTitle("Statistiques des banques exprimés en montant");
+		pieModel1.setTitle("Statistiques des banques exprimées en montant total");
 		pieModel1.setLegendPosition("w");
 
-		pieModel2.setTitle("Statistiques des banques exprimés en montant");
+		pieModel2.setTitle("Statistiques des banques exprimées en montant total");
 		pieModel2.setLegendPosition("e");
 		pieModel2.setFill(false);
 		pieModel2.setShowDataLabels(true);
 		pieModel2.setDiameter(150);
 		pieModel3
-				.setTitle("Statistiques des banques exprimés en nombre de transactions");
+				.setTitle("Statistiques des banques exprimées en nombre de transactions");
 		pieModel3.setLegendPosition("w");
 		pieModel4
-				.setTitle("Statistiques des banques exprimés en nombre de transactions");
+				.setTitle("Statistiques des banques exprimées en nombre de transactions");
 		pieModel4.setLegendPosition("e");
 		pieModel4.setFill(false);
 		pieModel4.setShowDataLabels(true);

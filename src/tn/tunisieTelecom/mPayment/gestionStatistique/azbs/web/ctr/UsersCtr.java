@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Admin;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Employees;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.EmployeesMpayement;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.User;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.DepartementEJBLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.UserEJBLocal;
@@ -20,8 +23,10 @@ public class UsersCtr {
 	private User user = new User();
 	private Admin admin = new Admin();
 	private Employees employees = new Employees();
+	private EmployeesMpayement employeesMpayement = new EmployeesMpayement();
 	private User selectedUser = new User() ;
 	private int idDep;
+	
 	@EJB
 	UserEJBLocal userEjbLocal;
 	@EJB
@@ -41,26 +46,44 @@ public class UsersCtr {
 	public String addAdmin() {
 		admin.setDepartement(departementEJBLocal.findById(idDep));
 		System.err.println("ok setdep"+ "  "+ admin.getDepartement().getNom());
+		
 		userEjbLocal.add(admin);
 		admin = new Admin();
 		return "/admin/users.jsf?faces-redirect=true";
 	}
-	
-	public void update(){
-		userEjbLocal.update(selectedUser);
-		selectedUser = new User();
+	public String addemployeMP() {
+		employeesMpayement.setDepartement(departementEJBLocal.findById(idDep));
+		userEjbLocal.add(employeesMpayement);
+		employeesMpayement=new EmployeesMpayement();
+		return "/admin/users.jsf?faces-redirect=true";
 	}
-	public void delete(){
+	public String update(){
+		
+		userEjbLocal.update(selectedUser);
+				
+		selectedUser = new User();
+		return "/admin/users.jsf?faces-redirect=true";
+	}
+	public String delete(){
 		userEjbLocal.delete(selectedUser);
 		selectedUser = new User();
+		return "/admin/users.jsf?faces-redirect=true";
 	}
-	
+
 	public String pageAddNewUser() {
 		return "/admin/addUser.jsf?faces-redirect=true";
+	}
+
+	public String pageUsers() {
+		return "/admin/users.jsf?faces-redirect=true";
 	}
 	
 	public String pageAddNewAdmin(){
 		return "/admin/addAdmin.jsf?faces-redirect=true";
+	}
+
+	public String pageAddNewEmplyeesMP(){
+		return "/admin/addemployeesMP.jsf?faces-redirect=true";
 	}
 
 	public List<User> getUsers() {
@@ -111,4 +134,13 @@ public class UsersCtr {
 		this.idDep = idDep;
 	}
 
+	public EmployeesMpayement getEmployeesMpayement() {
+		return employeesMpayement;
+	}
+
+	public void setEmployeesMpayement(EmployeesMpayement employeesMpayement) {
+		this.employeesMpayement = employeesMpayement;
+	}
+
+	
 }

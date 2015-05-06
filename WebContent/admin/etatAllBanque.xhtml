@@ -70,8 +70,18 @@
 				<f:facet name="footer">
 
 				</f:facet>
-
 			</p:dataTable>
+	<h:panelGrid columns="1">
+<br />
+
+				<h2>Exporter</h2>
+				<h:commandLink>
+					<p:graphicImage value="/ressources/images/pdf-2.png" />
+					<p:dataExporter type="pdf" target="sousCatDT" fileName="Etat" />
+				</h:commandLink>
+
+			</h:panelGrid>
+
 		</h:form>
 
 	</ui:define>
