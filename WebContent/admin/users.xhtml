@@ -3,10 +3,19 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> espace admin | Users</ui:define>
 	<ui:define name="content">
 		<h1>Gestion des utilisateurs</h1>
+		<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
+		
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="basicDT" var="user" value="#{usersCtr.findAll()}"
@@ -63,27 +72,26 @@
 			<h3>Détails Utilisateur</h3>
 			<h:form id="Champ">
 
-				<h:panelGrid id="grid" columns="3" cellspacing="10">
+				<h:panelGrid id="grid" columns="6" cellspacing="10">
 
 					<h:outputLabel for="Nom" value="Nom" />
 					<p:inputText id="Nom" value="#{usersCtr.selectedUser.nom}"
 						required="true" />
-					<p:message for="Nom" />
-
+					<p:message for="Nom" display="icon" />
 					<h:outputLabel for="Prenom" value="Prenom" />
 					<p:inputText id="Prenom" value="#{usersCtr.selectedUser.prenom}"
 						required="true" />
-					<p:message for="Prenom" />
+					<p:message for="Prenom" display="icon" />
 
 					<h:outputLabel for="Login" value="Login" />
 					<p:inputText id="Login" value="#{usersCtr.selectedUser.login}"
-						required="true" />
-					<p:message for="Login" />
+						required="true"  />
+					<p:message for="Login" display="icon" />
 
 					<h:outputLabel value="Password" />
 					<p:password id="Password" value="#{usersCtr.selectedUser.password}"
 						required="true" />
-					<p:message for="Password" />
+					<p:message for="Password"  display="icon"/>
 
 					<h:outputLabel value="Departement" />
 					<p:selectOneMenu value="#{usersCtr.selectedUser.departement.id}">
@@ -91,22 +99,30 @@
 							itemValue="#{dep.id}" itemLabel="#{dep.nom}" />
 					</p:selectOneMenu>
 					<br />
-					<p:commandButton value="Modifier" update="grid"
-						rendered="#{not empty produitCtr.selectedProduit}"
-						onclick="if (! confirm('Really want to do that?')) return false"
-						action="#{usersCtr.update()}"></p:commandButton>
-
-					<p:commandButton value="Supprimer" update="grid"
-						rendered="#{not empty sousCategoriesCtr.selectedSousCategories}"
-						onclick="if (! confirm('Really want to do that?')) return false"
-						action="#{usersCtr.delete()}"></p:commandButton>
-
-
-
+			
+		
 				</h:panelGrid>
-
-
+				<h:panelGrid  columns="1" cellspacing="10">
+			
+					<p:commandButton value="  Modifier" update="grid"
+						rendered="#{not empty usersCtr.selectedUser}"
+						onclick="if (! confirm('Really want to do that?')) return false"
+						action="#{usersCtr.update()}" icon= "ui-icon-pencil" style="width:150px;height:37px"></p:commandButton>
+				</h:panelGrid>
+		
 			</h:form>
+			<h:form>
+				<h:panelGrid  columns="1" cellspacing="10">
+			
+				<p:commandButton value="Supprimer" update=":form:basicDT"
+					rendered="#{not empty usersCtr.selectedUser}"
+					onclick="if (! confirm('Really want to do that?')) return false"
+					action="#{usersCtr.delete()}" icon="ui-icon-close" style="width:150px;height:37px">
+				</p:commandButton>
+				</h:panelGrid>
+		
+			</h:form>
+		
 		</p:panel>
 
 

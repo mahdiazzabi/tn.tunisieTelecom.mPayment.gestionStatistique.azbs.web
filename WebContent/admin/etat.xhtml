@@ -3,7 +3,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> Realiser etat statistique</ui:define>
 
 	<ui:define name="content">
@@ -118,7 +118,7 @@
 				<h2>Exporter</h2>
 				<h:commandLink>
 					<p:graphicImage value="/ressources/images/pdf-2.png" />
-					<p:dataExporter type="pdf" target="sousCatDT" fileName="Etat global du 06-04-2014" />
+					<p:dataExporter type="pdf" target="sousCatDT" fileName="Etat #{etatCategoriesCtr.banque.nom} #{etatCategoriesCtr.start} #{etatCategoriesCtr.end}" />
 				</h:commandLink>
 
 			</h:panelGrid>

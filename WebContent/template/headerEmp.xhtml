@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<div id="header">
+	<div>
+		<div class="logo">
+			<a href="transaction.jsf"></a>
+		</div>
+		<ul id="navigation">
+		<li ><a href="index.jsf">Accueil</a></li>
+		<li ><a href="EtatIndex.jsf">Tableau de bord</a></li>
+		<li ><a href="StatistiqueIndex.jsf">Statistique graphique</a></li>
+			
+		
+		</ul>
+		<div STYLE="float: right;">
+			<br />
+			<h:form>
+				<p:commandLink id="nonAjax" action="#{userCtr.doLogout()}"
+					ajax="false">
+					<h:outputText value="Se déconnecter" />
+				</p:commandLink>
+<br />
+			<a href="personal.jsf" STYLE="float: right;"><img
+				src="../ressources/images/Personal.png" /> </a>
+ 
+			</h:form>
+		</div>
+	</div>
+</div>
+
+</html>

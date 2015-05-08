@@ -3,7 +3,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	xmlns:p="http://primefaces.org/ui" template="/template/templateEmployeesMp.xhtml">
 	<ui:define name="title"> espace admin</ui:define>
 
 
@@ -19,15 +19,12 @@
 
 		<h:form enctype="multipart/form-data">
 			<p:growl id="growl" />
-
-
 			<h:panelGrid columns="2">
 				<h:outputLabel value="Banque" />
 				<p:selectOneMenu value="#{transactionCtr.idBanque}">
 					<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
 						itemValue="#{banq.id}" itemLabel="#{banq.nom}" />
 				</p:selectOneMenu>
-
 				<br />
 			</h:panelGrid>
 
@@ -44,12 +41,12 @@
 			</h:panelGrid>
 			<br />
 			<br />
-				
-				
+
+
 			<h:form id="form">
 				<p:dataTable id="basicDT" var="f"
 					value="#{fichierCtr.listeFichier()}" rows="10" rowKey="#{f.id}"
-					paginatorPosition="bottom"  paginator="true">
+					paginatorPosition="bottom" paginator="true">
 					<f:facet name="header">
 	          	Fichiers récemment traités
 	        </f:facet>

@@ -3,7 +3,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> Etat statistiques des banques</ui:define>
 
 	<ui:define name="content">
@@ -25,13 +25,14 @@
 					action="#{etatCategoriesCtr.doEtatAllBanques()}" onclick="rendered"></p:commandButton>
 			</h:panelGrid>
 		</h:form>
-				<p:separator />
-		
+		<p:separator />
+
 		<br />
-		
+
 		<h:form id="myform">
 
-			<p:dataTable id="tbl" value="#{etatCategoriesCtr.etats}" var="l" rowKey="#{l.id}" >
+			<p:dataTable id="tbl" value="#{etatCategoriesCtr.etats}" var="l"
+				rowKey="#{l.id}">
 				<f:facet name="header">
 		            	Etat statistique des banques Du #{etatCategoriesCtr.start.toLocaleString()} au #{etatCategoriesCtr.end.toLocaleString()}
 		            	 	</f:facet>
@@ -71,16 +72,17 @@
 
 				</f:facet>
 			</p:dataTable>
-	<h:panelGrid columns="1">
-<br />
+				<br />
 
-				<h2>Exporter</h2>
-				<h:commandLink>
-					<p:graphicImage value="/ressources/images/pdf-2.png" />
-					<p:dataExporter type="pdf" target="sousCatDT" fileName="Etat" />
-				</h:commandLink>
+				<h:panelGrid columns="1">
+					<h2>Exporter</h2>
+					<h:commandLink>
+						<p:graphicImage value="/ressources/images/pdf-2.png" />
+						<p:dataExporter type="pdf" target="tbl"
+							fileName="Etat des banque #{etatCategoriesCtr.start.toLocaleString()} #{etatCategoriesCtr.end.toLocaleString()}" />
+					</h:commandLink>
 
-			</h:panelGrid>
+				</h:panelGrid>
 
 		</h:form>
 

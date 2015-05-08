@@ -3,27 +3,42 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> espace admin | Users</ui:define>
 	<ui:define name="content">
+
 		<h1>Ajouter un employé Mpayement</h1>
+<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
+
 		<h:form id="Champ">
+
 			<h:panelGrid id="grid" columns="3" cellpadding="5">
 				<h:outputText for="Nom" value="Nom" />
-				<p:inputText id="Nom" value="#{usersCtr.employeesMpayement.nom}" required="true"/>
-				<p:message for="Nom" />
+				<p:inputText id="Nom" value="#{usersCtr.employeesMpayement.nom}"
+					required="true" />
+				<p:message for="Nom"  display="icon"/>
 
 				<h:outputText for="Prenom" value="Prenom" />
-				<p:inputText id="Prenom" value="#{usersCtr.employeesMpayement.prenom}" required="true" />
-				<p:message for="Prenom" />
+				<p:inputText id="Prenom"
+					value="#{usersCtr.employeesMpayement.prenom}" required="true" />
+				<p:message for="Prenom" display="icon"/>
 
 				<h:outputLabel for="login" value="login" />
-				<p:inputText id="login" value="#{usersCtr.employeesMpayement.login}" required="true" />
-				<p:message for="login" />
+				<p:inputText id="login" value="#{usersCtr.employeesMpayement.login}"
+					required="true" />
+				<p:message for="login" display="icon" />
 
 				<h:outputText for="Password" value="Password" />
-				<p:password id="Password" value="#{usersCtr.employeesMpayement.password}" required="true"  />
-				<p:message for="Password" />
+				<p:password id="Password"
+					value="#{usersCtr.employeesMpayement.password}" required="true" />
+				<p:message for="Password" display="icon" />
 
 				<h:outputText value="Departement" />
 				<p:selectOneMenu value="#{usersCtr.idDep}">
@@ -31,7 +46,24 @@
 						itemValue="#{dep.id}" itemLabel="#{dep.nom}" />
 				</p:selectOneMenu>
 				<br />
-				<p:commandButton value="Ajouter" action="#{usersCtr.addemployeMP()}" update="grid"></p:commandButton>
+
+			</h:panelGrid>
+			<br />
+				<h:panelGrid columns="2">
+					<p:commandButton value="Ajouter"
+						action="#{usersCtr.addemployeMP()}" update="grid"
+						icon="ui-icon-plusthick"></p:commandButton>
+					
+				</h:panelGrid>
+				<br />
+
+		</h:form>
+
+		<h:form>
+			<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+						<p:commandButton value="Retour" id="withIcon" ajax="false"
+							action="#{usersCtr.pageUsers()}" icon="ui-icon-triangle-1-w" ></p:commandButton>
+
 			</h:panelGrid>
 		</h:form>
 	</ui:define>

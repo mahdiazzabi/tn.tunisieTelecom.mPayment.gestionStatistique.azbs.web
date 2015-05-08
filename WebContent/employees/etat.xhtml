@@ -3,7 +3,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	xmlns:p="http://primefaces.org/ui" template="/template/templateEmployees.xhtml">
 	<ui:define name="title"> Realiser etat statistique</ui:define>
 
 	<ui:define name="content">
@@ -40,8 +40,7 @@
 		<h:form id="myform">
 
 			<p:dataTable id="tbl" value="#{etatCategoriesCtr.etats}" var="l"
-				rows="6" rowKey="#{l.id}"
-				selection="#{etatCategoriesCtr.selectedEtat}">
+				rows="6" rowKey="#{l.id}">
 				<f:facet name="header">
 		            	Etat statistique de la banque : #{etatCategoriesCtr.banque.nom} Du #{etatCategoriesCtr.start.toLocaleString()} au #{etatCategoriesCtr.end.toLocaleString()}
 		            	 	</f:facet>
@@ -69,7 +68,7 @@
 				<p:columnGroup type="footer">
 					<p:row>
 						<p:column colspan="3" style="text-align:right"
-							footerText="Totals:" />
+							footerText="Total : " />
 						<p:column colspan="2" footerText="#{etatCategoriesCtr.total_nbr}" />
 
 						<p:column colspan="2"
@@ -82,8 +81,6 @@
 				</f:facet>
 
 			</p:dataTable>
-
-			<br />
 
 			<br />
 
@@ -117,17 +114,11 @@
 
 			<br />
 
-			<br />
-
-			<h:panelGrid columns="2">
-
+			<h:panelGrid columns="1">
+				<h2>Exporter</h2>
 				<h:commandLink>
 					<p:graphicImage value="/ressources/images/pdf-2.png" />
-					<p:dataExporter type="pdf" target="tbl" fileName="Etat" />
-				</h:commandLink>
-				<h:commandLink>
-					<p:graphicImage value="/ressources/images/Excel.png" />
-					<p:dataExporter type="xls" target="tbl" fileName="Etat" />
+					<p:dataExporter type="pdf" target="sousCatDT" fileName="Etat #{etatCategoriesCtr.banque.nom} #{etatCategoriesCtr.start} #{etatCategoriesCtr.end}" />
 				</h:commandLink>
 
 			</h:panelGrid>

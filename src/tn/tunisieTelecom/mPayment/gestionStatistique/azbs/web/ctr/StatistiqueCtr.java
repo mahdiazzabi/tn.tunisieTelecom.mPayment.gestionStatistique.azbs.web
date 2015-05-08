@@ -18,6 +18,7 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.PieChartModel;
@@ -47,17 +48,17 @@ public class StatistiqueCtr {
 	private PieChartModel pieModelBanqueSousCatMontantpourcent = new PieChartModel();
 	private PieChartModel pieModelBanqueSousCatNombrepourcent = new PieChartModel();
 
+	private LineChartModel lineModel1 = new LineChartModel();
+	private LineChartModel lineModel2 = new LineChartModel();
+
 	private BarChartModel barModel = new BarChartModel();
 
 	private List<Banque> banques = new ArrayList<Banque>();
-	private Date start;
-	private Date end;
+	private Date start = new Date();
+	private Date end= new Date();
 	private int idBanque;
 	private List<SousCategories> sousCategories = new ArrayList<SousCategories>();
 	private List<Categories> categories = new ArrayList<Categories>();
-
-	private LineChartModel lineModel1 = new LineChartModel();
-	private String monthSelected;
 
 	@EJB
 	BanqueEJBLocal banqueEJBlocal;
@@ -74,6 +75,27 @@ public class StatistiqueCtr {
 	@EJB
 	StatistiqueEJBLocal statistiqueEJBLocal;
 
+	public void doStatistiquesParCategorie() {
+		barModel = createBarModel();
+		barModel.setTitle("Diagramme à bandes périodique par Catégorie");
+		barModel.setLegendPosition("ne");
+	}
+
+	public void doStatistiquesBancaire() {
+		createPieModel();
+	}
+
+	public void doStatistiquesParBanque() {
+		createPieModelBanqueSousCat();
+	}
+
+	public void doStatistiqueParSousCat() {
+
+		createLineModels_stat();
+
+	}
+
+	
 	private void createPieModelBanqueSousCat() {
 		pieModelBanqueSousCatMontant = new PieChartModel();
 		pieModelBanqueSousCatNombre = new PieChartModel();
@@ -174,10 +196,12 @@ public class StatistiqueCtr {
 			}
 		}
 
-		pieModel1.setTitle("Statistiques des banques exprimées en montant total");
+		pieModel1
+				.setTitle("Statistiques des banques exprimées en montant total");
 		pieModel1.setLegendPosition("w");
 
-		pieModel2.setTitle("Statistiques des banques exprimées en montant total");
+		pieModel2
+				.setTitle("Statistiques des banques exprimées en montant total");
 		pieModel2.setLegendPosition("e");
 		pieModel2.setFill(false);
 		pieModel2.setShowDataLabels(true);
@@ -194,38 +218,71 @@ public class StatistiqueCtr {
 
 	}
 
-	public void doStatistiquesParBanque() {
-		createPieModelBanqueSousCat();
+	private void createLineModels_stat() {
+		lineModel2 = initLinearModel_stat();
+		lineModel2.setTitle("Statistiques par sous-catégories");
+		lineModel2.setLegendPosition("e");
 	}
 
-	public void doStatistiquesBancaire() {
-		createPieModel();
-	}
+	private LineChartModel initLinearModel_stat() {
+		LineChartModel model2 = new LineChartModel();
+		sousCategories = sousCategotiesEJBLocal.findAll();
+		float montant = 0;
+		float max = 0;
 
-	public void doStatistiqueMensuelle() {
+		for (SousCategories sousCategories : sousCategories) {
 
-		createLineModels();
+			List<Object[]> objects = statistiqueEJBLocal.statSousCat(start,
+					end, sousCategories.getId());
+			LineChartSeries series1 = new LineChartSeries();
+			series1.setLabel(sousCategories.getLibelle());
+			for (Object[] objects2 : objects) {
+				System.err.println(objects2[0].toString() + "   " + objects2[1]);
+				montant = Float.parseFloat(objects2[1]+ "");
+				
+				System.err.println(sousCategories.getLibelle());
+				System.err.println((Date)objects2[0]);
+				System.err.println(montant);
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				String dat = dateFormat.format((Date)objects2[0]);
+				
+				series1.set(dat, montant);
+				if (montant > max) {
+					max = montant;
+				}
 
-	}
+			}
+			model2.addSeries(series1);
+		}
+		org.primefaces.model.chart.Axis xAxis = model2.getAxis(AxisType.X);
+		xAxis.setLabel("Période");
 
-	public void doStatistiquesParCategorie() {
-		barModel = createBarModel();
-		barModel.setTitle("Diagramme à bandes périodique par Catégorie");
-		barModel.setLegendPosition("ne");
-
-
+		org.primefaces.model.chart.Axis yAxis = model2.getAxis(AxisType.Y);
+		yAxis.setLabel("Montant de l'activité");
+		yAxis.setMin(0);
+		yAxis.setMax(max + 500);
+		yAxis.setTickCount(7);
+		model2.setZoom(true);
+	       
+		DateAxis axis = new DateAxis("Période");
+        axis.setTickAngle(-50);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String datend = dateFormat.format(end);
+		String datmin = dateFormat.format(start);
+		
+		axis.setMin(datmin);
+        axis.setMax(datend);
+        axis.setTickFormat("%b %#d, %y");
+         
+        model2.getAxes().put(AxisType.X, axis);
+		return model2;
 	}
 
 	private BarChartModel createBarModel() {
 		BarChartModel model = new BarChartModel();
-
 		categories = categoriesLocal.findAll();
-
 		Double montant = 0.0;
 		Double max = 0.0;
-
-		
-		
 		for (Categories categories : categories) {
 			ChartSeries serieCat = new ChartSeries();
 			serieCat.setLabel(categories.getLibelle());
@@ -237,17 +294,18 @@ public class StatistiqueCtr {
 			for (Object[] statistique : statistiques) {
 				System.err.println((Date) statistique[0] + "   "
 						+ (Double) statistique[1]);
-				
-				 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-				 String dat = dateFormat.format((Date) statistique[0]);
-				serieCat.set( dat , (Double) statistique[1] );
-				
+
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				String dat = dateFormat.format((Date) statistique[0]);
+				serieCat.set(dat, (Double) statistique[1]);
+
 				montant = (Double) statistique[1];
 				if (montant > max) {
 					max = montant;
 				}
 
 			}
+
 			model.addSeries(serieCat);
 
 		}
@@ -264,81 +322,11 @@ public class StatistiqueCtr {
 
 	}
 
-	private void createLineModels() {
-		lineModel1 = initLinearModel();
-		lineModel1.setTitle("Evolution des ventes pour le mois : "
-				+ monthSelected);
-		lineModel1.setLegendPosition("e");
-	}
 
-	private LineChartModel initLinearModel() {
-		LineChartModel model = new LineChartModel();
-		sousCategories = sousCategotiesEJBLocal.findAll();
-		// Date date = monthSelected;
-		// System.err.println(date);
-		SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy",
-				Locale.ENGLISH);
-		Date date = new Date();
-		try {
-			date = format.parse("01 " + monthSelected);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Double montant = 0.0;
-		Double max = 0.0;
-		for (SousCategories sousCategories : sousCategories) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(date);
-			int nbr_jour_mois = calendar
-					.getActualMaximum(Calendar.DAY_OF_MONTH);
-			LineChartSeries series1 = new LineChartSeries();
-			series1.setLabel(sousCategories.getLibelle());
-			Date d = calendar.getTime();
-			for (int i = 1; i <= nbr_jour_mois; i++) {
-				montant = transactionEJBLocal.calculStatMensuelle(d,
-						sousCategories.getId());
-				series1.set(i, montant);
-				if (montant > max) {
-					max = montant;
-				}
-				calendar.add(calendar.DATE, +1);
-				d = calendar.getTime();
-			}
-			org.primefaces.model.chart.Axis yAxis = model.getAxis(AxisType.Y);
-			yAxis.setMin(0);
-			yAxis.setMax(max + 500);
-			yAxis.setTickCount(7);
-			org.primefaces.model.chart.Axis xAxis = model.getAxis(AxisType.X);
-			xAxis.setMin(1);
-			xAxis.setMax(31);
-			xAxis.setTickCount(31);
-
-			model.addSeries(series1);
-		}
-
-		return model;
-	}
-
-	// public void doStatistiquesBanqueSousCat() {
-	// createPieModelBanqueSousCat();
-	// }
-
-	// public void subjectSelectionChanged(final AjaxBehaviorEvent event){
-	//
-	// doStatistiquesBanqueSousCat();
-	// }
+	
 
 	public int getIdBanque() {
 		return idBanque;
-	}
-
-	public String getMonthSelected() {
-		return monthSelected;
-	}
-
-	public void setMonthSelected(String monthSelected) {
-		this.monthSelected = monthSelected;
 	}
 
 	public void setIdBanque(int idBanque) {
@@ -451,6 +439,14 @@ public class StatistiqueCtr {
 
 	public void setBarModel(BarChartModel barModel) {
 		this.barModel = barModel;
+	}
+
+	public LineChartModel getLineModel2() {
+		return lineModel2;
+	}
+
+	public void setLineModel2(LineChartModel lineModel2) {
+		this.lineModel2 = lineModel2;
 	}
 
 }

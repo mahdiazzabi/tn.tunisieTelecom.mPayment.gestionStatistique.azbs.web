@@ -3,7 +3,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui" template="/template/templateEmployees.xhtml">
 	<ui:define name="title"> espace admin | utilisateur</ui:define>
 	<ui:define name="content">
 
@@ -16,7 +16,7 @@
 				<h:form id="update">
 					<p:growl id="growl" showDetail="true" sticky="true" />
 					<h:panelGrid columns="2" cellspacing="10">
-						<h:outputLabel value="Ancien Mot de passe " />
+						<h:outputLabel value="Ancien Mot de passe" />
 						<p:password value="#{userCtr.ancienMdp}" required="true" />
 						<h:outputLabel value="Nouveau Mot de passe" />
 						<p:password value="#{userCtr.nouveauMdp}" required="true" />

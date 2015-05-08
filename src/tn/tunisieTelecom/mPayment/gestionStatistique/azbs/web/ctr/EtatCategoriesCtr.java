@@ -51,6 +51,9 @@ public class EtatCategoriesCtr implements Serializable {
 	
 	public void doEtatAllBanques() {
 		etats = new ArrayList<Etat>();
+		total_montant = 0;
+		total_nbr = 0;
+
 		if (end.before(start)) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -66,8 +69,6 @@ public class EtatCategoriesCtr implements Serializable {
 										"Attention : ",
 										"Un ou plusieurs fichiers n'ont pas était traités pour la date selectionée."));
 			} else {
-				total_montant = 0;
-				total_nbr = 0;
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(end);
 				calendar.add(calendar.HOUR_OF_DAY, +23);
@@ -86,9 +87,12 @@ public class EtatCategoriesCtr implements Serializable {
 	}
 
 	public void doEtatCategorie() {
-
+		banque = banqueEJBLocal.findById(id_banque);
 		etats = new ArrayList<Etat>();
 		etatSousCategories = new ArrayList<EtatSousCategorie>();
+		total_montant = 0;
+		total_nbr = 0;
+
 		if (end.before(start)) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -105,8 +109,6 @@ public class EtatCategoriesCtr implements Serializable {
 										"Attention : ",
 										"Un ou plusieurs fichiers n'ont pas était traités pour la date selectionée."));
 			} else {
-				total_montant = 0;
-				total_nbr = 0;
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(end);
 				calendar.add(calendar.HOUR_OF_DAY, +23);

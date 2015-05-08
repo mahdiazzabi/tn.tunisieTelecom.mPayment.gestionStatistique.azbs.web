@@ -3,10 +3,18 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> espace admin | Users</ui:define>
 	<ui:define name="content">
 		<h1>Ajouter un administrateur</h1>
+		<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
+		
 		<h:form id = "Champ" >
 
 			<h:panelGrid id="grid" columns="3" cellpadding="5">
@@ -37,8 +45,18 @@
 				</p:selectOneMenu>
 				<br />
 				<p:commandButton value="Ajouter" action="#{usersCtr.addAdmin()}"
-					update="grid"></p:commandButton>
+					update="grid" icon="ui-icon-plusthick"></p:commandButton>
 			</h:panelGrid>
 		</h:form>
+	<h:form>
+	<br/>
+			<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+
+						<p:commandButton value="Retour" id="withIcon" ajax="false"
+							action="#{usersCtr.pageUsers()}" icon="ui-icon-triangle-1-w" ></p:commandButton>
+
+			</h:panelGrid>
+		</h:form>
+	
 	</ui:define>
 </ui:composition>

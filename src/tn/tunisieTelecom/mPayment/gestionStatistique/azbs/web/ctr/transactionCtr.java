@@ -324,17 +324,18 @@ public class transactionCtr {
 						transactions.add(tr);
 					}
 				}
+				br.close();
 				Boolean prod_OK = true;
 				for (Transaction transaction : transactions) {
 					if (transaction.getProduit() == null) {
 						prod_OK = false;
 					}
 				}
+				
 				if (prod_OK) {
 					if (transactionEJBLocal.addListe(transactions)) {
 						fichier.setEtat_traitement("TRAITE");
 						fichierEJBLocal.update(fichier);
-						br.close();
 						FacesContext.getCurrentInstance().addMessage(
 								null,
 								new FacesMessage("Successful", "Le fichier "
@@ -459,16 +460,34 @@ public class transactionCtr {
 						tr.setProduit(produit_SMT_Facture);
 						transactions.add(tr);
 					}
+					br.close();
 					if (transactionEJBLocal.addListe(transactions)) {
 						fichier.setEtat_traitement("TRAITE");
 						fichierEJBLocal.update(fichier);
+						FacesContext.getCurrentInstance().addMessage(
+								null,
+								new FacesMessage("Successful", "Le fichier "
+										+ fichier.getNom()
+										+ " est traité avec succés."));
+
+					} else {
+						fichierEJBLocal.remove(fichier);
+						List<Statistique> statistiques = statistiqueEJBLocal
+								.findByIdBanqueJour(date_fichier,
+										banque.getId());
+						for (Statistique statistique : statistiques) {
+							statistiqueEJBLocal.delete(statistique);
+						}
+						FacesContext.getCurrentInstance().addMessage(
+								null,
+								new FacesMessage(FacesMessage.SEVERITY_ERROR,
+										"Format erroné : ",
+										"Le contenu du fichier  "
+												+ fichier.getNom()
+												+ " est erroné."));
+
 					}
-					br.close();
-					FacesContext.getCurrentInstance().addMessage(
-							null,
-							new FacesMessage("Successful", "Le fichier "
-									+ fichier.getNom()
-									+ " est traité avec succés."));
+
 				} catch (Exception e) {
 					fichierEJBLocal.remove(fichier);
 					List<Statistique> statistiques = statistiqueEJBLocal
@@ -536,16 +555,32 @@ public class transactionCtr {
 						tr.setProduit(produit);
 						transactions.add(tr);
 					}
+					br.close();
+
 					if (transactionEJBLocal.addListe(transactions)) {
 						fichier.setEtat_traitement("TRAITE");
 						fichierEJBLocal.update(fichier);
+						FacesContext.getCurrentInstance().addMessage(
+								null,
+								new FacesMessage("Successful", "Le fichier "
+										+ fichier.getNom()
+										+ " est traité avec succés."));
+					} else {
+						fichierEJBLocal.remove(fichier);
+						List<Statistique> statistiques = statistiqueEJBLocal
+								.findByIdBanqueJour(date_fichier,
+										banque.getId());
+						for (Statistique statistique : statistiques) {
+							statistiqueEJBLocal.delete(statistique);
+						}
+						FacesContext.getCurrentInstance().addMessage(
+								null,
+								new FacesMessage(FacesMessage.SEVERITY_ERROR,
+										"Format erroné : ",
+										"Le contenu du fichier  "
+												+ fichier.getNom()
+												+ " est erroné."));
 					}
-					br.close();
-					FacesContext.getCurrentInstance().addMessage(
-							null,
-							new FacesMessage("Successful", "Le fichier "
-									+ fichier.getNom()
-									+ " est traité avec succés."));
 				} catch (Exception e) {
 					fichierEJBLocal.remove(fichier);
 					List<Statistique> statistiques = statistiqueEJBLocal

@@ -24,9 +24,9 @@ public class UsersCtr {
 	private Admin admin = new Admin();
 	private Employees employees = new Employees();
 	private EmployeesMpayement employeesMpayement = new EmployeesMpayement();
-	private User selectedUser = new User() ;
+	private User selectedUser = new User();
 	private int idDep;
-	
+
 	@EJB
 	UserEJBLocal userEjbLocal;
 	@EJB
@@ -38,34 +38,117 @@ public class UsersCtr {
 
 	public String addEmployee() {
 		employees.setDepartement(departementEJBLocal.findById(idDep));
-		userEjbLocal.add(employees);
+		try {
+			userEjbLocal.add(employees);
+
+		} catch (Exception e) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_FATAL,
+									"Attention : Violation d'une contrainte d'integrité : Login deja utilisé ",
+									"L'utilisateur selectionné ne peut pas être supprimé : Violation d'une contrainte d'integrité "));
+			selectedUser = new User();
+			employees = new Employees();
+			idDep = 1;
+
+			return "";
+		}
 		employees = new Employees();
+		selectedUser = new User();
+		idDep = 1;
 		return "/admin/users.jsf?faces-redirect=true";
 	}
 
 	public String addAdmin() {
 		admin.setDepartement(departementEJBLocal.findById(idDep));
-		System.err.println("ok setdep"+ "  "+ admin.getDepartement().getNom());
-		
-		userEjbLocal.add(admin);
+		System.err
+				.println("ok setdep" + "  " + admin.getDepartement().getNom());
+		try {
+			userEjbLocal.add(admin);
+		} catch (Exception e) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_FATAL,
+									"Attention : Violation d'une contrainte d'integrité : Login deja utilisé ",
+									"L'utilisateur selectionné ne peut pas être supprimé : Violation d'une contrainte d'integrité "));
+			selectedUser = new User();
+			admin = new Admin();
+			idDep = 1 ;
+			return "";
+		}
 		admin = new Admin();
-		return "/admin/users.jsf?faces-redirect=true";
-	}
-	public String addemployeMP() {
-		employeesMpayement.setDepartement(departementEJBLocal.findById(idDep));
-		userEjbLocal.add(employeesMpayement);
-		employeesMpayement=new EmployeesMpayement();
-		return "/admin/users.jsf?faces-redirect=true";
-	}
-	public String update(){
-		
-		userEjbLocal.update(selectedUser);
-				
+		idDep = 1;
 		selectedUser = new User();
 		return "/admin/users.jsf?faces-redirect=true";
 	}
-	public String delete(){
-		userEjbLocal.delete(selectedUser);
+
+	public String addemployeMP() {
+		employeesMpayement.setDepartement(departementEJBLocal.findById(idDep));
+		try {
+
+			userEjbLocal.add(employeesMpayement);
+		} catch (Exception e) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_FATAL,
+									"Attention : Violation d'une contrainte d'integrité : Login deja utilisé ",
+									"L'utilisateur selectionné ne peut pas être supprimé : Violation d'une contrainte d'integrité "));
+			selectedUser = new User();
+			employeesMpayement = new EmployeesMpayement();
+			idDep =1;
+			return "";
+
+		}
+		employeesMpayement = new EmployeesMpayement();
+		selectedUser = new User();
+
+		return "/admin/users.jsf?faces-redirect=true";
+	}
+
+	public String update() {
+		try {
+			userEjbLocal.update(selectedUser);
+
+		} catch (Exception e) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_FATAL,
+									"Attention : L'utilisateur selectionné ne peut pas être modifié : Violation d'une contrainte d'integrité : Login deja utilisé ",
+									"L'utilisateur selectionné ne peut pas être supprimé : Violation d'une contrainte d'integrité "));
+			return "";
+		}
+
+		selectedUser = new User();
+		return "/admin/users.jsf?faces-redirect=true";
+	}
+
+	public String delete() {
+		try {
+			userEjbLocal.delete(selectedUser);
+
+		} catch (Exception e) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_FATAL,
+									"Attention : L'utilisateur selectionné ne peut pas être supprimé : Violation d'une contrainte d'integrité ",
+									"L'utilisateur selectionné ne peut pas être supprimé : Violation d'une contrainte d'integrité "));
+			return "";
+		}
 		selectedUser = new User();
 		return "/admin/users.jsf?faces-redirect=true";
 	}
@@ -75,14 +158,15 @@ public class UsersCtr {
 	}
 
 	public String pageUsers() {
+		selectedUser = new User();
 		return "/admin/users.jsf?faces-redirect=true";
 	}
-	
-	public String pageAddNewAdmin(){
+
+	public String pageAddNewAdmin() {
 		return "/admin/addAdmin.jsf?faces-redirect=true";
 	}
 
-	public String pageAddNewEmplyeesMP(){
+	public String pageAddNewEmplyeesMP() {
 		return "/admin/addemployeesMP.jsf?faces-redirect=true";
 	}
 
@@ -115,7 +199,13 @@ public class UsersCtr {
 	}
 
 	public User getSelectedUser() {
-		return selectedUser;
+		try {
+			return selectedUser;
+		} catch (Exception e) {
+			selectedUser = new User();
+			return selectedUser;
+		}
+
 	}
 
 	public void setSelectedUser(User selectedUser) {
@@ -142,5 +232,4 @@ public class UsersCtr {
 		this.employeesMpayement = employeesMpayement;
 	}
 
-	
 }

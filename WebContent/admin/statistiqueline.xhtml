@@ -3,19 +3,28 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
+	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> Statistique</ui:define>
 
 	<ui:define name="content">
-		<h1>Statistiques des banques :</h1>
+		<h1>Statistiques des Sous-catégories</h1>
 		<h:form>
-			<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
-				<div id="datepicker"></div>
-				<h:inputText class="mycal" value="#{statistiqueCtr.monthSelected}" />
+
+			<h:panelGrid columns="5" cellpadding="5">
+
+				<p:outputLabel value="Periode Du :" />
+				<p:calendar id="popup" value="#{statistiqueCtr.start}" />
+				<p:outputLabel value="Au :" />
+				<p:calendar id="popup2" value="#{statistiqueCtr.end}" />
 				<p:commandButton value="Analyser" ajax="false"
-					action="#{statistiqueCtr.doStatistiqueMensuelle()}"
+					action="#{statistiqueCtr.doStatistiqueParSousCat()}"
 					disabled="false" rendered="true" />
+
 			</h:panelGrid>
+			<br />
+			<p:chart type="line" model="#{statistiqueCtr.lineModel2}"
+				style="height:400px;width:806px;" />
+				<br />
 			<p:chart type="line" model="#{statistiqueCtr.lineModel1}"
 				style="height:400px;width:806px;" />
 		</h:form>
