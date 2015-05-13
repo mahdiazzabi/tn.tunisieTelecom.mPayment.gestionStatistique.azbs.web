@@ -3,24 +3,31 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 
 	<ui:define name="title"> Menu Statistiques</ui:define>
 
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Acceuil" id="withIcon"
+				ajax="false" action="#{userCtr.BackHome()}" icon="ui-icon-home"></p:commandButton>
+		</h:form>
+		<br />
+		<br />
 		<ul class="ca-menu">
 			<li><a href="etat.jsf"> <span class="ca-icon"><img
 						src="../ressources/images/statement.png" /></span>
 					<div class="ca-content">
 						<br /> <br />
-						<h2 class="ca-main">Etat statistique par banque</h2>
+						<h2 class="ca-main">Tableau de bord par banque</h2>
 					</div>
 			</a></li>
 			<li><a href="etatAllBanque.jsf"> <span class="ca-icon"><img
 						src="../ressources/images/Etat.png" /></span>
 					<div class="ca-content">
 						<br /> <br />
-						<h2 class="ca-main">Etat statistique globale des banques</h2>
+						<h2 class="ca-main">Tableau de bord globale des banques</h2>
 					</div>
 			</a></li>
 		</ul>

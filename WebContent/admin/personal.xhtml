@@ -3,32 +3,46 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> espace admin | utilisateur</ui:define>
 	<ui:define name="content">
-
-
+		<h:form>
+			<p:commandButton style="float: right;" value="Acceuil" id="withIcon"
+				ajax="false" action="#{userCtr.BackHome()}" icon="ui-icon-home"></p:commandButton>
+		</h:form>
+		<br />
 		<h1>Modification de mot de passe</h1>
-
 
 		<p:panel>
 			<h:panelGrid coluns="2">
 				<h:form id="update">
 					<p:growl id="growl" showDetail="true" sticky="true" />
-					<h:panelGrid columns="2" cellspacing="10">
-						<h:outputLabel value="Ancien Mot de passe " />
-						<p:password value="#{userCtr.ancienMdp}" required="true" />
-						<h:outputLabel value="Nouveau Mot de passe" />
-						<p:password value="#{userCtr.nouveauMdp}" required="true" />
-						<h:outputLabel value="Confirmation Mot de passe" />
-						<p:password value="#{userCtr.confirmMdp}" required="true" />
+					<h:panelGrid id="grid" columns="3" cellspacing="10">
+
+
+
+						<h:outputLabel for="AMDP" value="Ancien Mot de passe " />
+						<p:password id="AMDP" value="#{userCtr.ancienMdp}" required="true" />
+						<p:message for="AMDP" display="icon" />
+
+						<h:outputLabel for="NMDP" value="Nouveau Mot de passe" />
+						<p:password id="NMDP" value="#{userCtr.nouveauMdp}"
+							required="true" />
+						<p:message for="NMDP" display="icon" />
+
+						<h:outputLabel for="CNMDP" value="Confirmation Mot de passe" />
+						<p:password id="CNMDP" value="#{userCtr.confirmMdp}"
+							required="true" />
+						<p:message for="CNMDP" display="icon" />
 
 
 					</h:panelGrid>
-<br />
-					<p:commandButton value="Modifier mon mot de passe" action="#{userCtr.update_mdp()}"
-						update="growl">
+					<br />
+					<p:commandButton value="Modifier mon mot de passe"
+						action="#{userCtr.update_mdp()}" update="growl">
 						<f:ajax render=":update" />
+						<f:ajax render="grid" />
 					</p:commandButton>
 
 				</h:form>

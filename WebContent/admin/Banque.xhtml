@@ -3,10 +3,25 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> espace admin | banque</ui:define>
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{banqueCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br />
 		<h1>Gestion des banques</h1>
+		<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
+
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="basicDT" var="banq"
@@ -31,16 +46,22 @@
 			<h3>Détails banque</h3>
 			<h:panelGrid columns="2">
 				<h:form>
-					<h:panelGrid columns="2" style="margin-right:80px">
+					<h:panelGrid id="grid" columns="3" style="margin-right:80px">
 						<h:outputLabel value="Id" />
-						<p:inputText id="txtid" value="#{banqueCtr.selectedBanque.id}"
+						<p:inputText id="Id" value="#{banqueCtr.selectedBanque.id}"
 							readonly="true" />
-						<h:outputLabel value="Nom" />
-						<p:inputText id="txtnom1" value="#{banqueCtr.selectedBanque.nom}" />
+						<p:message for="Id" display="icon" />
+
+						<h:outputLabel for="Nom" value="Nom" />
+						<p:inputText id="Nom" value="#{banqueCtr.selectedBanque.nom}"
+							required="true" />
+						<p:message for="Nom" />
+
 						<p:commandButton value="Modifier" update=":form:basicDT"
 							rendered="#{not empty banqueCtr.selectedBanque}"
 							onclick="if (! confirm('Really want to do that?')) return false"
-							action="#{banqueCtr.update()}"></p:commandButton>
+							action="#{banqueCtr.update()}" resetValues="true"></p:commandButton>
+
 						<p:commandButton value="Supprimer" update=":form:basicDT"
 							rendered="#{not empty banqueCtr.selectedBanque}"
 							onclick="if (! confirm('Really want to do that?')) return false"
@@ -53,12 +74,15 @@
 		<p:panel id="Ajout">
 			<h3>Ajouter une nouvelle banque</h3>
 			<h:form>
-				<h:panelGrid columns="2">
-					<h:outputLabel value="Nom" />
-					<p:inputText id="txtNom" value="#{banqueCtr.banque.nom}" />
+				<h:panelGrid columns="3">
+					<h:outputLabel for="txtNom" value="Nom" />
+					<p:inputText id="txtNom" value="#{banqueCtr.banque.nom}"
+						required="true" />
+					<p:message for="txtNom" display="icon" />
+
 					<p:commandButton value="Ajouter" update=":form:basicDT"
-						action="#{banqueCtr.add}" onclick="txtnom.value=''" ></p:commandButton>
-						
+						action="#{banqueCtr.add}" onclick="txtnom.value=''"></p:commandButton>
+
 				</h:panelGrid>
 			</h:form>
 		</p:panel>

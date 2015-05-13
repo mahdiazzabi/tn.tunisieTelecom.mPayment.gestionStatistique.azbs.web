@@ -1,5 +1,6 @@
 package tn.tunisieTelecom.mPayment.gestionStatistique.azbs.web.ctr;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,7 +13,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.event.SelectEvent;
+
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.PageSize;
 
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Banque;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.BanqueEJBLocal;
@@ -47,7 +52,6 @@ public class EtatCategoriesCtr implements Serializable {
 	@EJB
 	FichierEJBLocal fichierEJBLocal;
 
-
 	
 	public void doEtatAllBanques() {
 		etats = new ArrayList<Etat>();
@@ -58,15 +62,17 @@ public class EtatCategoriesCtr implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Attention : ", "Intervale de temps incorrect."));
+							"Attention : Intervale de temps incorrect. ",
+							"Intervale de temps incorrect."));
 		} else {
 			if (!fichierEJBLocal.verif_traitement_for_stat(start, end)) {
 				FacesContext
 						.getCurrentInstance()
 						.addMessage(
 								null,
-								new FacesMessage(FacesMessage.SEVERITY_ERROR,
-										"Attention : ",
+								new FacesMessage(
+										FacesMessage.SEVERITY_ERROR,
+										"Attention : Un ou plusieurs fichiers n'ont pas était traités pour la date selectionée.",
 										"Un ou plusieurs fichiers n'ont pas était traités pour la date selectionée."));
 			} else {
 				Calendar calendar = Calendar.getInstance();
@@ -97,7 +103,8 @@ public class EtatCategoriesCtr implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Attention : ", "Intervale de temps incorrect."));
+							"Attention : Intervale de temps incorrect.",
+							"Intervale de temps incorrect."));
 		} else {
 			if (!fichierEJBLocal.verif_traitement_for_stat(start, end,
 					id_banque)) {
@@ -105,8 +112,9 @@ public class EtatCategoriesCtr implements Serializable {
 						.getCurrentInstance()
 						.addMessage(
 								null,
-								new FacesMessage(FacesMessage.SEVERITY_ERROR,
-										"Attention : ",
+								new FacesMessage(
+										FacesMessage.SEVERITY_ERROR,
+										"Un ou plusieurs fichiers n'ont pas était traités pour la date selectionée.",
 										"Un ou plusieurs fichiers n'ont pas était traités pour la date selectionée."));
 			} else {
 				Calendar calendar = Calendar.getInstance();
@@ -122,11 +130,25 @@ public class EtatCategoriesCtr implements Serializable {
 				}
 				etatSousCategories = transactionEJBLocal
 						.calculeEtatSousCategorie(start, end, id_banque);
-
 			}
-
 		}
+	}
 
+	public String BackIndex() {
+		 etats = new ArrayList<Etat>();
+		etatSousCategories = new ArrayList<EtatSousCategorie>();
+		 start= new Date();
+		 end = new Date();
+		return "/admin/EtatIndex?faces-redirect=true";
+	}
+
+	public String BackAcceuil() {
+		 etats = new ArrayList<Etat>();
+		etatSousCategories = new ArrayList<EtatSousCategorie>();
+		 start= new Date();
+		 end = new Date();
+
+		return "/admin/index?faces-redirect=true";
 	}
 
 	public Banque getBanque() {

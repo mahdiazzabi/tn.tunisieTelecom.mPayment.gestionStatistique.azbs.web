@@ -7,6 +7,13 @@
 	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> espace admin | Users</ui:define>
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{usersCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br />
+		
 		<h1>Gestion des utilisateurs</h1>
 		<p:tooltip />
 		<h:form>
@@ -15,7 +22,7 @@
 				closable="true" />
 		</h:form>
 		<p:separator />
-		
+
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="basicDT" var="user" value="#{usersCtr.findAll()}"
@@ -78,6 +85,7 @@
 					<p:inputText id="Nom" value="#{usersCtr.selectedUser.nom}"
 						required="true" />
 					<p:message for="Nom" display="icon" />
+
 					<h:outputLabel for="Prenom" value="Prenom" />
 					<p:inputText id="Prenom" value="#{usersCtr.selectedUser.prenom}"
 						required="true" />
@@ -85,13 +93,13 @@
 
 					<h:outputLabel for="Login" value="Login" />
 					<p:inputText id="Login" value="#{usersCtr.selectedUser.login}"
-						required="true"  />
+						required="true" />
 					<p:message for="Login" display="icon" />
 
 					<h:outputLabel value="Password" />
 					<p:password id="Password" value="#{usersCtr.selectedUser.password}"
 						required="true" />
-					<p:message for="Password"  display="icon"/>
+					<p:message for="Password" display="icon" />
 
 					<h:outputLabel value="Departement" />
 					<p:selectOneMenu value="#{usersCtr.selectedUser.departement.id}">
@@ -99,30 +107,32 @@
 							itemValue="#{dep.id}" itemLabel="#{dep.nom}" />
 					</p:selectOneMenu>
 					<br />
-			
-		
+
+
 				</h:panelGrid>
-				<h:panelGrid  columns="1" cellspacing="10">
-			
-					<p:commandButton value="  Modifier" update="grid"
+				<h:panelGrid columns="1" cellspacing="10">
+
+					<p:commandButton value="Modifier" update="grid"
 						rendered="#{not empty usersCtr.selectedUser}"
 						onclick="if (! confirm('Really want to do that?')) return false"
-						action="#{usersCtr.update()}" icon= "ui-icon-pencil" style="width:150px;height:37px"></p:commandButton>
+						action="#{usersCtr.update()}" icon="ui-icon-pencil"
+						style="width:150px;height:37px"></p:commandButton>
 				</h:panelGrid>
-		
+
 			</h:form>
 			<h:form>
-				<h:panelGrid  columns="1" cellspacing="10">
-			
-				<p:commandButton value="Supprimer" update=":form:basicDT"
-					rendered="#{not empty usersCtr.selectedUser}"
-					onclick="if (! confirm('Really want to do that?')) return false"
-					action="#{usersCtr.delete()}" icon="ui-icon-close" style="width:150px;height:37px">
-				</p:commandButton>
+				<h:panelGrid columns="1" cellspacing="10">
+
+					<p:commandButton value="Supprimer" update=":form:basicDT"
+						rendered="#{not empty usersCtr.selectedUser}"
+						onclick="if (! confirm('Really want to do that?')) return false"
+						action="#{usersCtr.delete()}" icon="ui-icon-close"
+						style="width:150px;height:37px">
+					</p:commandButton>
 				</h:panelGrid>
-		
+
 			</h:form>
-		
+
 		</p:panel>
 
 

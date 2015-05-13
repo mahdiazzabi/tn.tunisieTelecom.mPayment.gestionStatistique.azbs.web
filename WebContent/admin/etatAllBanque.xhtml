@@ -7,9 +7,15 @@
 	<ui:define name="title"> Etat statistiques des banques</ui:define>
 
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{etatCategoriesCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br /><br />
 		<p:tooltip />
 		<h:form>
-			<p:messages id="messages" showDetail="true" autoUpdate="true"
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
 				closable="true" />
 		</h:form>
 		<p:separator />
@@ -26,9 +32,7 @@
 			</h:panelGrid>
 		</h:form>
 		<p:separator />
-
 		<br />
-
 		<h:form id="myform">
 
 			<p:dataTable id="tbl" value="#{etatCategoriesCtr.etats}" var="l"
@@ -45,7 +49,6 @@
 							headerText="Montant total (en dt)" />
 					</p:row>
 				</p:columnGroup>
-
 				<p:column rowspan="1" colspan="3" headerText="Banques">
 					<h:outputLabel value="#{l.libelle}" />
 				</p:column>
@@ -56,24 +59,20 @@
 				<p:column rowspan="1" colspan="2" headerText="Montant Total">
 					<h:outputLabel value="#{l.somme}" />
 				</p:column>
-
 				<p:columnGroup type="footer">
 					<p:row>
 						<p:column colspan="3" style="text-align:right"
-							footerText="Totals:" />
+							footerText="Total :" />
 						<p:column colspan="2" footerText="#{etatCategoriesCtr.total_nbr}" />
 
 						<p:column colspan="2"
 							footerText="#{etatCategoriesCtr.total_montant}" />
 					</p:row>
 				</p:columnGroup>
-
 				<f:facet name="footer">
-
 				</f:facet>
 			</p:dataTable>
 				<br />
-
 				<h:panelGrid columns="1">
 					<h2>Exporter</h2>
 					<h:commandLink>
@@ -81,10 +80,7 @@
 						<p:dataExporter type="pdf" target="tbl"
 							fileName="Etat des banque #{etatCategoriesCtr.start.toLocaleString()} #{etatCategoriesCtr.end.toLocaleString()}" />
 					</h:commandLink>
-
 				</h:panelGrid>
-
 		</h:form>
-
 	</ui:define>
 </ui:composition>

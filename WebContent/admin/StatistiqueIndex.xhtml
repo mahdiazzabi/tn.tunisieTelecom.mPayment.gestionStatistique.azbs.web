@@ -3,11 +3,25 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 
 	<ui:define name="title"> Menu Statistiques</ui:define>
+	<h:form>
+		<p:commandButton style="float: right;" value="Retour" id="withIcon"
+			ajax="false" action="#{statistiqueCtr.BackIndex()}"
+			icon="ui-icon-triangle-1-w"></p:commandButton>
+	</h:form>
+	<br />
+	<br />
 
 	<ui:define name="content">
+	<h:form>
+			<p:commandButton style="float: right;" value="Acceuil" id="withIcon"
+				ajax="false" action="#{userCtr.BackHome()}" icon="ui-icon-home"></p:commandButton>
+		</h:form>
+		<br /><br />
+		
 		<ul class="ca-menu">
 			<li><a href="statistique.jsf"> <span class="ca-icon"><img
 						src="../ressources/images/pie-chart.png" /> </span>
@@ -23,14 +37,16 @@
 						<h2 class="ca-main">Statistiques par sous-catégories</h2>
 					</div>
 			</a></li>
-				<li><a href="statistiqueBanqueSousCat.jsf"> <span class="ca-icon"><img
-						src="../ressources/images/chart.png" /> </span>
+			<li><a href="statistiqueBanqueSousCat.jsf"> <span
+					class="ca-icon"><img src="../ressources/images/chart.png" />
+				</span>
 					<div class="ca-content">
 						<br /> <br />
 						<h2 class="ca-main">Statistiques par banque</h2>
 					</div>
 			</a></li>
-			<li><a href="statistiqueCategorie.jsf"> <span class="ca-icon"><img
+			<li><a href="statistiqueCategorie.jsf"> <span
+					class="ca-icon"><img
 						src="../ressources/images/analytics.png" /> </span>
 					<div class="ca-content">
 						<br /> <br />

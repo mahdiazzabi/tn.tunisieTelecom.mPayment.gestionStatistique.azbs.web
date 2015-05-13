@@ -16,36 +16,37 @@
 		</h:form>
 		<p:separator />
 
-		<h:form id="form">
-			<h:panelGrid columns="2" cellpadding="5">
-				
+		<h:form id="Champ">
+			<h:panelGrid id="grid" columns="3" cellspacing="10">
+
 				<h:outputText for="Nom" value="Nom" />
-				<p:inputText id="Nom" value="#{usersCtr.admin.nom}" required="true" />
-				<p:message for="Nom" />
-				
-				
-				<h:outputText for="Nom" value="Nom" />
-				<p:inputText value="#{usersCtr.employees.nom}" />
-				<p:message for="Nom" />
-				
+				<p:inputText id="Nom" value="#{usersCtr.employees.nom}"
+					required="true" />
+				<p:message for="Nom" display="icon" />
+
 				<h:outputText for="Prenom" value="Prenom" />
-				<p:inputText value="#{usersCtr.employees.prenom}" />
-				<p:message for="Prenom" />
-				
-				<h:outputLabel value="login" />
-				<p:inputText value="#{usersCtr.employees.login}" />
-				
-				<h:outputText value="password" />
-				<p:password value="#{usersCtr.employees.password}" />
-				
+				<p:inputText id="Prenom" value="#{usersCtr.employees.prenom}"
+					required="true" />
+				<p:message for="Prenom" display="icon" />
+
+				<h:outputLabel for="login" value="login" />
+				<p:inputText id="login" value="#{usersCtr.employees.login}"
+					required="true" />
+				<p:message for="login" display="icon" />
+
+				<h:outputText for="password" value="Password" />
+				<p:password id="password" value="#{usersCtr.employees.password}"
+					required="true" />
+				<p:message for="password" display="icon" />
+
 				<h:outputText value="Departement" />
 				<p:selectOneMenu value="#{usersCtr.idDep}">
 					<f:selectItems var="dep" value="#{departementCtr.findAll()}"
 						itemValue="#{dep.id}" itemLabel="#{dep.nom}" />
 				</p:selectOneMenu>
-
+				<br />
 				<p:commandButton value="Ajouter" action="#{usersCtr.addEmployee()}"
-					icon="ui-icon-plusthick"></p:commandButton>
+					icon="ui-icon-plusthick" update = "grid"></p:commandButton>
 			</h:panelGrid>
 		</h:form>
 

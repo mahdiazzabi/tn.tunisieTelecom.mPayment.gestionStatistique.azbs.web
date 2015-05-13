@@ -3,11 +3,27 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui" 
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> espace admin | categories</ui:define>
 
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{categoriesCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br />
+		
 		<h1>Gestion des catégories</h1>
+		<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
+		
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="basicDT" var="cat" editable="true"
@@ -54,12 +70,17 @@
 		<p:panel id="Ajout">
 			<h2>Ajout nouvelle catégorie</h2>
 			<br />
-			<h:form>
+			<h:form id="Champ">
 				<h:panelGrid columns="3" cellspacing="10px">
-					<h:outputLabel value="Libellé " />
-					<p:inputText value="#{categoriesCtr.categorie.libelle}" />
-					<p:commandButton value="Add" update=":form:basicDT"
-						action="#{categoriesCtr.add()}"></p:commandButton>
+					<h:outputLabel for="Libelle" value="Libellé " />
+					<p:inputText id="Libelle" value="#{categoriesCtr.categorie.libelle}" 
+					required="true"  />
+					<p:message for="Libelle" display="icon" />
+
+					<p:commandButton value="Ajouter" update=":form:basicDT"
+						action="#{categoriesCtr.add()}" onclick="Libellé.value=''"></p:commandButton>
+						
+						
 				</h:panelGrid>
 			</h:form>
 		</p:panel>

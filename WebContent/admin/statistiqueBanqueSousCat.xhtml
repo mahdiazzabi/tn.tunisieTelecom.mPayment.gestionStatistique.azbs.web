@@ -3,45 +3,61 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> Statistique</ui:define>
 
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{statistiqueCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br />
+		<br />
+
 		<h1>Statistiques des banques par Sous Catégories</h1>
+		<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
+
+	
 		<h:form id="cam">
-			<h:panelGrid columns="3" cellpadding="5">
-				<h:panelGrid columns="6" cellpadding="5">
+			<h:panelGrid columns="6" cellpadding="5">
 
-					<h:outputLabel value="Banque" />
-					<p:selectOneMenu value="#{statistiqueCtr.idBanque}">
-						<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
-							itemValue="#{banq.id}" itemLabel="#{banq.nom}" />
-					</p:selectOneMenu>
-					<p:outputLabel value="Periode Du :" />
-					<p:calendar id="popup" value="#{statistiqueCtr.start}" />
-					<p:outputLabel value="Au :" />
-					<p:calendar id="popup2" value="#{statistiqueCtr.end}" />
-					<p:commandButton value="Valider"
-						action="#{statistiqueCtr.doStatistiquesParBanque()}"
-						onclick="rendered"></p:commandButton>
-				</h:panelGrid>
+				<h:outputLabel value="Banque" />
+				<p:selectOneMenu value="#{statistiqueCtr.idBanque}">
+					<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
+						itemValue="#{banq.id}" itemLabel="#{banq.nom}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Periode Du :" />
+				<p:calendar id="popup" value="#{statistiqueCtr.start}" />
+				<p:outputLabel value="Au :" />
+				<p:calendar id="popup2" value="#{statistiqueCtr.end}" />
+				<p:commandButton value="Valider"
+					action="#{statistiqueCtr.doStatistiquesParBanque()}"
+					onclick="rendered"></p:commandButton>
 			</h:panelGrid>
+			<br />
+			<h:panelGrid columns="2" cellspacing="5">
 
-			<h:panelGrid columns="2">
-			
 				<p:chart type="pie"
 					model="#{statistiqueCtr.pieModelBanqueSousCatMontant}"
-					style="width:400px;height:300px" />
-				<p:chart type="pie"
-					model="#{statistiqueCtr.pieModelBanqueSousCatMontantpourcent}"
-					style="width:400px;height:300px" />
+					style="width:475px;height:350px" />
+
+				<p:chart type="line" model="#{statistiqueCtr.lineModel3}"
+					style="height:350px;width:600px;" />
 
 				<p:chart type="pie"
 					model="#{statistiqueCtr.pieModelBanqueSousCatNombre}"
-					style="width:400px;height:300px" />
-				<p:chart type="pie"
-					model="#{statistiqueCtr.pieModelBanqueSousCatNombrepourcent}"
-					style="width:400px;height:300px" />
+					style="width:475px;height:350px" />
+				<p:chart type="line" model="#{statistiqueCtr.lineModel4}"
+					style="height:350px;width:600px;" />
+
 
 			</h:panelGrid>
 		</h:form>

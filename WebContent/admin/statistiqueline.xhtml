@@ -3,11 +3,30 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> Statistique</ui:define>
 
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{statistiqueCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br />
+		<br />
+
+
 		<h1>Statistiques des Sous-catégories</h1>
+		<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
+
+
 		<h:form>
 
 			<h:panelGrid columns="5" cellpadding="5">
@@ -24,7 +43,7 @@
 			<br />
 			<p:chart type="line" model="#{statistiqueCtr.lineModel2}"
 				style="height:400px;width:806px;" />
-				<br />
+			<br />
 			<p:chart type="line" model="#{statistiqueCtr.lineModel1}"
 				style="height:400px;width:806px;" />
 		</h:form>

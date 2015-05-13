@@ -8,11 +8,20 @@
 
 
 	<ui:define name="content">
+				<h:form>
+
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{transactionCtr.BackAcceuil()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		
 		<h1>Traitement des fichiers</h1>
+		
+
 		<p:tooltip />
 		<h:form>
 
-			<p:messages id="messages" showDetail="true" autoUpdate="true"
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
 				closable="true" />
 		</h:form>
 		<p:separator />

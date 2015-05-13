@@ -21,22 +21,22 @@
 
 				<h:outputText for="Nom" value="Nom" />
 				<p:inputText id="Nom" value="#{usersCtr.admin.nom}" required="true" />
-				<p:message for="Nom" />
+				<p:message for="Nom" display="icon" />
 
 				<h:outputText for="Prenom" value="Prenom" />
 				<p:inputText id="Prenom" value="#{usersCtr.admin.prenom}"
 					required="true" />
-				<p:message for="Prenom" />
+				<p:message for="Prenom" display="icon" />
 
 				<h:outputLabel for="Login" value="login" />
 				<p:inputText id="Login" value="#{usersCtr.admin.login}"
 					required="true" />
-				<p:message for="Login" />
+				<p:message for="Login" display="icon" />
 
 				<h:outputText for="Password" value="Password" />
 				<p:password id="password" value="#{usersCtr.admin.password}"
-					required="true" />
-				<p:message for="password" />
+					required="true"  />
+				<p:message for="password"  display="icon" />
 
 				<h:outputText value="Departement" />
 				<p:selectOneMenu value="#{usersCtr.idDep}">

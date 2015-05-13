@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Categories;
+import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Departement;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.SousCategories;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.CategoriesLocal;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.SousCategotiesEJBLocal;
@@ -25,22 +28,85 @@ public class SousCategoriesCtr {
 	@EJB
 	CategoriesLocal categoriesLocal;
 
+	public String BackIndex() {
+		return "/admin/gestionBase?faces-redirect=true";
+	}
+
 	public List<SousCategories> findAll() {
 		return sousCategories = sousCategotiesEJBLocal.findAll();
 	}
 
-	public void update() {
-		sousCategotiesEJBLocal.update(selectedSousCategories);
+	public String update() {
+		try {
+
+			if (selectedSousCategories.getId() == 0) {
+				FacesContext
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(
+										FacesMessage.SEVERITY_WARN,
+										"Attention : Vous devez selectionner une sous catégorie",
+										"Vous devez selectionner une sous catégorie "));
+
+				return "";
+			}
+
+			sousCategotiesEJBLocal.update(selectedSousCategories);
+			return "/admin/sousCategories?faces-redirect=true";
+
+		} catch (Exception e) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_FATAL,
+									"Attention : La sous catégorie selectionnée ne peut pas être modifiée : Violation d'une contrainte d'integrité ",
+									"La sous catégorie selectionnée ne peut pas être supprimée : Violation d'une contrainte d'integrité "));
+			return "";
+		}
+
 	}
 
-	public void delete() {
-		sousCategotiesEJBLocal.remove(selectedSousCategories);
+	public String delete() {
+		try {
+
+			if (selectedSousCategories.getId() == 0) {
+				FacesContext
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(
+										FacesMessage.SEVERITY_WARN,
+										"Attention : Vous devez selectionner une sous catégorie",
+										"Vous devez selectionner une sous catégorie "));
+
+				return "";
+			}
+
+			sousCategotiesEJBLocal.remove(selectedSousCategories);
+			return "/admin/sousCategories?faces-redirect=true";
+
+		} catch (Exception e) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_FATAL,
+									"Attention : La sous catégorie selectionnée ne peut pas être supprimée : Violation d'une contrainte d'integrité ",
+									"La sous catégorie selectionnée ne peut pas être supprimée : Violation d'une contrainte d'integrité "));
+			return "";
+		}
+
 	}
 
-	public void add() {
+	public String add() {
 		sousCategorie.setCategories(categoriesLocal.findById(idCat));
 		sousCategotiesEJBLocal.add(sousCategorie);
 		sousCategorie = new SousCategories();
+		return "/admin/sousCategories.jsf?faces-redirect=true";
 	}
 
 	public SousCategories getSousCategorie() {

@@ -29,7 +29,9 @@ public class ProduitCtr {
 	@EJB
 	SousCategotiesEJBLocal sousCategotiesEJBLocal;
 
-
+	public String BackIndex() {
+		return "/admin/gestionBase?faces-redirect=true";
+	}
 	public List<Produit> charger_liste_produits() {
 
 		return produits = produitEJBLocal.findall();

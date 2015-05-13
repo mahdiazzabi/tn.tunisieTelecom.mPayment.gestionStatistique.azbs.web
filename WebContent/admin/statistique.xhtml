@@ -3,14 +3,30 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> Statistique</ui:define>
 
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{statistiqueCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br />
+		<br />
 		<h1>Statistiques périodiques des banques</h1>
+		<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
+
+
 		<h:form id="cam">
 			<h:panelGrid columns="5" cellpadding="5">
-
 				<p:outputLabel value="Periode Du :" />
 				<p:calendar id="popup" value="#{statistiqueCtr.start}" />
 				<p:outputLabel value="Au :" />
@@ -22,15 +38,15 @@
 			<h:panelGrid columns="2">
 				<p:chart type="pie" model="#{statistiqueCtr.pieModel1}"
 					style="width:400px;height:300px" />
-				<p:chart type="pie" model="#{statistiqueCtr.pieModel2}"
-					style="width:400px;height:300px" />
+				<p:chart type="line" model="#{statistiqueCtr.lineModel5}"
+					style="height:350px;width:600px;" />
+
 			</h:panelGrid>
 			<h:panelGrid columns="2">
-
 				<p:chart type="pie" model="#{statistiqueCtr.pieModel3}"
 					style="width:400px;height:300px" />
-				<p:chart type="pie" model="#{statistiqueCtr.pieModel4}"
-					style="width:400px;height:300px" />
+				<p:chart type="line" model="#{statistiqueCtr.lineModel6}"
+					style="height:350px;width:600px;" />
 
 			</h:panelGrid>
 		</h:form>

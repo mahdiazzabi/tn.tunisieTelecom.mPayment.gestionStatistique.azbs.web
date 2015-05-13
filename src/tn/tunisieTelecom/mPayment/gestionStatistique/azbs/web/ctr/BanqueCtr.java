@@ -38,6 +38,9 @@ public class BanqueCtr {
 		banqueEJBLocal.add(banque);
 		banque = new Banque();
 	}
+	public String BackIndex() {
+		return "/admin/gestionBase?faces-redirect=true";
+	}
 	public List<Banque> getBanques() {
 		return banques;
 	}

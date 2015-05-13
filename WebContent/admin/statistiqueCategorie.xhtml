@@ -3,11 +3,30 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> Statistique par categories </ui:define>
 
 	<ui:define name="content">
-		<h1>Statistique par categories</h1>
+
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{statistiqueCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br />
+		<br />
+
+		<h1>Statistiques globales des categories</h1>
+		<p:tooltip />
+		<h:form>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
+
+
 		<h:form>
 			<h:panelGrid columns="5" cellpadding="5">
 
@@ -16,11 +35,12 @@
 				<p:outputLabel value="Au :" />
 				<p:calendar id="popup2" value="#{statistiqueCtr.end}" />
 				<p:commandButton value="Valider"
-						action="#{statistiqueCtr.doStatistiquesParCategorie()}"
-						onclick="rendered"></p:commandButton>
-			
+					action="#{statistiqueCtr.doStatistiquesParCategorie()}"
+					onclick="rendered"></p:commandButton>
+
 			</h:panelGrid>
-			<p:chart type="bar" model="#{statistiqueCtr.barModel}" style="width:900px;height:600px"/>
+			<p:chart type="bar" model="#{statistiqueCtr.barModel}"
+				style="width:900px;height:600px" />
 		</h:form>
 
 

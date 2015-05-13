@@ -110,7 +110,9 @@ public class UserCtr {
 		}
 
 	}
-
+	public String BackHome() {
+		return "/admin/index?faces-redirect=true";
+	}
 	public String getAncienMdp() {
 		return ancienMdp;
 	}

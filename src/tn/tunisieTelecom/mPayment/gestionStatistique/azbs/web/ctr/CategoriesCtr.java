@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.entity.Categories;
 import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.CategoriesLocal;
 
@@ -57,5 +58,7 @@ public class CategoriesCtr {
 	public void setCategories(List<Categories> categories) {
 		this.categories = categories;
 	}
-
+	public String BackIndex() {
+		return "/admin/gestionBase?faces-redirect=true";
+	}
 }

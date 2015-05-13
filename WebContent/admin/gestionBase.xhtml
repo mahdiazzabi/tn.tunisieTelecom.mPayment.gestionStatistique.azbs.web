@@ -6,6 +6,11 @@
 	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> Gestion Base</ui:define>
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Acceuil" id="withIcon"
+				ajax="false" action="#{userCtr.BackHome()}" icon="ui-icon-home"></p:commandButton>
+		</h:form>
+		<br /><br />
 		<ul class="ca-menu">
 			<li><a href="users.jsf"> <br /> <span class="ca-icon"><img
 						src="../ressources/images/user.png" /> </span>

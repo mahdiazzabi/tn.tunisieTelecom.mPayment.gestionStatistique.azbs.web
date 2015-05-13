@@ -18,7 +18,7 @@ import tn.tunisieTelecom.mPayment.gestionStatistique.azbs.ejb.local.services.Use
 
 @ManagedBean
 @SessionScoped
-public class UsersCtr {
+public class usersCtr {
 	private List<User> users = new ArrayList<User>();
 	private User user = new User();
 	private Admin admin = new Admin();
@@ -136,6 +136,19 @@ public class UsersCtr {
 
 	public String delete() {
 		try {
+			if (selectedUser.getId() == 0) {
+				FacesContext
+				.getCurrentInstance()
+				.addMessage(
+						null,
+						new FacesMessage(
+								FacesMessage.SEVERITY_WARN,
+								"Attention : Vous devez selectionner un utilisateur. ",
+								"Vous devez selectionner un utilisateur. "));
+		
+				return "" ;	
+			}
+
 			userEjbLocal.delete(selectedUser);
 
 		} catch (Exception e) {
@@ -150,9 +163,12 @@ public class UsersCtr {
 			return "";
 		}
 		selectedUser = new User();
+		
 		return "/admin/users.jsf?faces-redirect=true";
 	}
-
+	public String BackIndex() {
+		return "/admin/gestionBase?faces-redirect=true";
+	}
 	public String pageAddNewUser() {
 		return "/admin/addUser.jsf?faces-redirect=true";
 	}

@@ -3,21 +3,31 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> espace admin | produit </ui:define>
-
-
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{produitCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br />
 		<h1>Gestion des produits</h1>
+		<p:tooltip />
+		<h:form>
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+		</h:form>
+		<p:separator />
 		<h:form id="form">
-			<p:growl id="growl" showDetail="true"  />
-			
+			<p:growl id="growl" showDetail="true" />
 			<p:dataTable id="basicDT" var="prod"
-				value="#{produitCtr.charger_liste_produits()}" rows="6" rowKey="#{prod.id}"
-				paginatorPosition="bottom" selectionMode="single" paginator="true"
+				value="#{produitCtr.charger_liste_produits()}" rows="6"
+				rowKey="#{prod.id}" paginatorPosition="bottom"
+				selectionMode="single" paginator="true"
 				selection="#{produitCtr.selectedProduit}">
 				<p:ajax event="rowSelect" update=":details" />
-
 				<f:facet name="header">
 	          	List des produits
 	        </f:facet>
@@ -43,14 +53,14 @@
 				<h:form id="update">
 					<h:panelGrid columns="2" style="margin-right:80px">
 						<h:outputLabel value="Référence" />
-						<p:inputText value="#{produitCtr.selectedProduit.ref}" />
+						<p:inputText value="#{produitCtr.selectedProduit.ref}" required="true" />
 						<h:outputLabel value="Libellé" />
-						<p:inputText value="#{produitCtr.selectedProduit.libelle}" />
+						<p:inputText value="#{produitCtr.selectedProduit.libelle}" required="true" />
 						<h:outputLabel value="Sous-Catégorie" />
 						<p:selectOneMenu value="#{produitCtr.idSousCat}">
 							<f:selectItems var="sousCat"
-								value="#{produitCtr.charger_liste_sous_cat()}" itemValue="#{sousCat.id}"
-								itemLabel="#{sousCat.libelle}" />
+								value="#{produitCtr.charger_liste_sous_cat()}"
+								itemValue="#{sousCat.id}" itemLabel="#{sousCat.libelle}" />
 						</p:selectOneMenu>
 						<p:commandButton value="Modifier" update=":form:basicDT"
 							rendered="#{not empty produitCtr.selectedProduit}"
@@ -66,22 +76,22 @@
 		</p:panel>
 		<br />
 		<p:panel id="Ajout">
-		
 			<h3>Ajouter un nouveau produit</h3>
-			<h:form id="ajout">
-			<p:growl id="growl" showDetail="true"  />
-			
+			<h:form id="Champ">
+				<p:growl id="growl" showDetail="true" />
 				<h:panelGrid columns="2">
 					<h:outputLabel value="Sous-Catégorie" />
 					<p:selectOneMenu value="#{produitCtr.idSousCat}">
 						<f:selectItems var="sousCat"
-							value="#{produitCtr.charger_liste_sous_cat()}" itemValue="#{sousCat.id}"
-							itemLabel="#{sousCat.libelle}" />
+							value="#{produitCtr.charger_liste_sous_cat()}"
+							itemValue="#{sousCat.id}" itemLabel="#{sousCat.libelle}" />
 					</p:selectOneMenu>
-					<h:outputLabel value="Référence " />
-					<p:inputText value="#{produitCtr.produit.ref}" />
-					<h:outputLabel value="Libellé" />
-					<p:inputText value="#{produitCtr.produit.libelle}" />
+					<h:outputLabel for="reference" value="Référence " />
+					<p:inputText id="reference" value="#{produitCtr.produit.ref}"
+						required="true" />
+					<h:outputLabel for="libelle" value="Libellé" />
+					<p:inputText id="libelle" value="#{produitCtr.produit.libelle}"
+						required="true" />
 					<p:commandButton id="dd" value="Ajouter" update=":form:basicDT"
 						action="#{produitCtr.ajouter_produit}"></p:commandButton>
 				</h:panelGrid>

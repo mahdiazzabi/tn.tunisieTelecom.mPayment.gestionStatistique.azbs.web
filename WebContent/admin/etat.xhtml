@@ -3,23 +3,30 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/template/templateAdmin.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/templateAdmin.xhtml">
 	<ui:define name="title"> Realiser etat statistique</ui:define>
 
 	<ui:define name="content">
+		<h:form>
+			<p:commandButton style="float: right;" value="Retour" id="withIcon"
+				ajax="false" action="#{etatCategoriesCtr.BackIndex()}"
+				icon="ui-icon-triangle-1-w"></p:commandButton>
+		</h:form>
+		<br /><br />
 		<p:tooltip />
 		<h:form>
 
-			<p:messages id="messages" showDetail="true" autoUpdate="true"
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
 				closable="true" />
 		</h:form>
 		<p:separator />
 
 
 		<h:panelGrid columns="2">
-			<h:form id="Formulaire_saisie_banque_date">
+			<h:form id="form">
 				<p:growl id="msg" showDetail="true" />
-				<h:panelGrid columns="6" style="margin-right:80px">
+				<h:panelGrid columns="6" cellspacing="5">
 					<h:outputLabel value="Banque :" />
 					<p:selectOneMenu value="#{etatCategoriesCtr.id_banque}">
 						<f:selectItems var="banq" value="#{banqueCtr.listeBanque()}"
@@ -36,7 +43,7 @@
 				</h:panelGrid>
 			</h:form>
 		</h:panelGrid>
-
+		<br />
 		<h:form id="myform">
 
 			<p:dataTable id="tbl" value="#{etatCategoriesCtr.etats}" var="l"
@@ -77,17 +84,13 @@
 				</p:columnGroup>
 
 				<f:facet name="footer">
-
 				</f:facet>
-
 			</p:dataTable>
-
 			<br />
-
 			<p:dataTable id="sousCatDT"
 				value="#{etatCategoriesCtr.etatSousCategories}" var="l" rows="10"
 				rowKey="#{l.libelle}">
-				<f:facet name="header">
+				<f:facet name="header" >
 		            	Détails des sous categories 
         			</f:facet>
 				<p:columnGroup type="header">
@@ -118,7 +121,8 @@
 				<h2>Exporter</h2>
 				<h:commandLink>
 					<p:graphicImage value="/ressources/images/pdf-2.png" />
-					<p:dataExporter type="pdf" target="sousCatDT" fileName="Etat #{etatCategoriesCtr.banque.nom} #{etatCategoriesCtr.start} #{etatCategoriesCtr.end}" />
+					<p:dataExporter type="pdf" target="sousCatDT"
+						fileName="Etat #{etatCategoriesCtr.banque.nom} #{etatCategoriesCtr.start} #{etatCategoriesCtr.end}"   />
 				</h:commandLink>
 
 			</h:panelGrid>
